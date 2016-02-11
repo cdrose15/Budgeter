@@ -1,0 +1,105 @@
+﻿@model  Budgeter.Models.CodeFirst.Household
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Household</h2>
+<hr />
+@foreach (var user in Model.Users)
+{
+<h4>Members</h4>
+    <table id="budget">
+
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(modeluser => user.Email)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modeluser => user.FirstName) 
+                    @Html.DisplayFor(modeuser => user.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modeluser => user.Email)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<br />
+
+<h4>Invite</h4>
+<h5>Invite another user to join your household.</h5>
+    using (Html.BeginForm("Invite", "Invites"))
+    {
+                            @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                @Html.LabelFor(modeluser => user.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.EditorFor(modeluser => user.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-4">
+                                    <input type="submit" value="Send Invite" class="btn btn-sm btn-success" />
+                                </div>
+                            </div>
+                        </div>
+    }
+}
+
+<h4>Leave</h4>
+<h5>Leave your current household and start a new one.</h5>
+
+    <!-- Are you sure you want to leave household modal -->
+<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal">Leave this Household</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form method="Post" action="@Url.Action("Leave","Households")"> 
+                     Are you sure? You cannot undo this action.
+                    <input type="submit" value="Leave Household" /> 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts {
+    <!--Script for Data Table plugin-->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#budget').DataTable({
+            "paging":false,
+            "ordering": false,
+            "info": false,
+            "searching":false
+        });
+    });
+    </script>
+}
+
+
+

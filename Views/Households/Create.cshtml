@@ -1,0 +1,76 @@
+﻿@model Budgeter.Models.CodeFirst.Household
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Household</h2>
+<h3>Please Create or Join a Household</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="login-panel panel panel-default">
+                <section class="panel-body ">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Create</h4>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-lg btn-success btn-block" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    </section> 
+                </div> 
+            </div> 
+        <div class="col-md-6">
+            <div class="login-panel panel panel-default">
+                <section class="panel-body ">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Join</h4>
+                    </div>
+                    
+                    @using (Html.BeginForm("Join", "Households"))
+                    {
+                            @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Invites, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Invites, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Join" class="btn btn-lg btn-success btn-block" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </section>
+            </div>
+        </div> 
+      </div> 
+    </div> 
+
+
+                    @section Scripts {
+                        @Scripts.Render("~/bundles/jqueryval")
+                    }
