@@ -240,7 +240,7 @@
     <Compile Include="Models\CodeFirst\Invite.cs" />
     <Compile Include="Models\CodeFirst\Transaction.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\KeyGenerator.cs" />
+    <Compile Include="Models\SendInvite.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -259,6 +259,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\Budget Icon %28Custom%29 %282%29.PNG" />
+    <Content Include="img\Budget Icon.PNG" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -269,6 +271,7 @@
     <Content Include="private.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="private2.config" />
+    <None Include="Properties\PublishProfiles\crose-budget.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -325,7 +328,7 @@
     <Content Include="Views\BankAccounts\Delete.cshtml" />
     <Content Include="Views\BankAccounts\Details.cshtml" />
     <Content Include="Views\BankAccounts\Edit.cshtml" />
-    <Content Include="Views\BankAccounts\Index.cshtml" />
+    <None Include="Views\BankAccounts\Index.cshtml" />
     <Content Include="Views\BudgetItems\Create.cshtml" />
     <Content Include="Views\BudgetItems\Delete.cshtml" />
     <Content Include="Views\BudgetItems\Details.cshtml" />
@@ -343,21 +346,17 @@
     <Content Include="Views\CategoryLists\Index.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\Index.cshtml" />
-    <Content Include="Views\Invites\Create.cshtml" />
-    <Content Include="Views\Invites\Delete.cshtml" />
-    <Content Include="Views\Invites\Details.cshtml" />
-    <Content Include="Views\Invites\Edit.cshtml" />
-    <Content Include="Views\Invites\Index.cshtml" />
     <Content Include="Views\Transactions\Create.cshtml" />
     <Content Include="Views\Transactions\Delete.cshtml" />
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
     <Content Include="Views\Shared\Info.cshtml" />
+    <Content Include="Views\Households\Dashboard.cshtml" />
+    <Content Include="Views\Manage\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

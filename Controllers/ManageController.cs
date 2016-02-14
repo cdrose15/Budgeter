@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
+using Budgeter.Models.CodeFirst;
+using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {
@@ -14,6 +16,8 @@ namespace Budgeter.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -62,6 +66,7 @@ namespace Budgeter.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -210,6 +215,38 @@ namespace Budgeter.Controllers
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+        }
+
+        // GET: /Manage/EditProfile
+        [HttpGet]
+        public ActionResult EditProfile()
+        {
+            var name = new EditProfileViewModel();
+            var user = db.Users.Find(User.Identity.GetUserId());
+            
+            name.FirstName = user.FirstName;
+            name.LastName = user.LastName;
+
+            return View(name);
+        }
+
+        //
+        // POST: /Manage/EditProfile
+        [HttpPost]
+        public ActionResult EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            
+            db.SaveChanges();
+
+            return RedirectToAction("Index", new { Message = ManageMessageId.EditProfileSuccess });
         }
 
         //
@@ -380,7 +417,8 @@ namespace Budgeter.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            EditProfileSuccess
         }
 
 #endregion

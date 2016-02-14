@@ -26,8 +26,10 @@ namespace Budgeter.Controllers
             Household household = db.Households.Find(user.HouseholdId);
             if (household == null)
             {
-                return HttpNotFound();
+                return RedirectToAction ("Create","Households");
             }
+
+            ViewBag.SuccessMessage = TempData["successMessage"];
             return View(household);
         }
 
@@ -54,6 +56,7 @@ namespace Budgeter.Controllers
                     {
                         //Household household = db.Households.Find(Id);
                         user.HouseholdId = invite.HouseholdId;
+                        db.Invites.Remove(invite);
                         db.SaveChanges();
                         return RedirectToAction("Index", new { id = user.HouseholdId });
                     }
@@ -69,7 +72,7 @@ namespace Budgeter.Controllers
                 }            
             }
             TempData["errorMessage"] = "An error has occurred";
-            return RedirectToAction("Create");
+            return RedirectToAction("Create","Households");
         }
 
         [HttpPost]
@@ -80,7 +83,7 @@ namespace Budgeter.Controllers
                 user.HouseholdId = null;
                 db.SaveChanges();
 
-                return RedirectToAction("Create");           
+                return RedirectToAction("Create","Households");           
         }
 
         [HttpGet]
@@ -122,6 +125,52 @@ namespace Budgeter.Controllers
             ViewBag.errorMessage = "An error has occurred";
             return View();
         }
+
+        // POST: Households/Invite
+        [HttpPost]
+        public ActionResult Invite(ContactMessage sendemail)
+        {
+
+            var invite = new Invite();
+            var keycode = KeyGenerator.GetUniqueKey(5);
+
+            invite.NameId = User.Identity.GetUserId();
+            var user = db.Users.Find(invite.NameId);
+            invite.UserEmail = sendemail.Email;
+            invite.HouseholdId = sendemail.HouseholdId;
+            invite.InviteCode = keycode;
+
+            var duplicates = db.Invites.Where(i => i.UserEmail == sendemail.Email);
+            foreach(var duplicate in duplicates)
+            {
+                db.Invites.Remove(duplicate);
+            }
+
+            db.Invites.Add(invite);
+            db.SaveChanges();
+
+            var Email = new EmailService();
+
+            var mail = new IdentityMessage
+            {
+                Subject = "Join My Household",
+                Destination = sendemail.Email,
+                Body = $"{user.FirstName } { user.LastName } sent you a message. Enter the following code: {invite.InviteCode} to join my household. First you must go to https://crose-budget.azurewebsites.net and register."
+            };
+
+            Email.SendAsync(mail);
+
+            TempData["successMessage"] = "Your Message Has Been Successfully Sent";
+            return RedirectToAction("Index", "Households");
+        }
+
+        // GET: Households/Dashboard
+        [HttpGet]
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
+        
 
         protected override void Dispose(bool disposing)
         {

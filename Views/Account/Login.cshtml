@@ -4,15 +4,14 @@
     ViewBag.Title = "Log in";
 }
 <div class="container">
-<div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6 col-md-offset-3">
         <div class="login-panel panel panel-default">
-            <section class="panel-body ">
-                <div class="panel-heading">
+            <div class="panel-heading">
                     <h4 class="panel-title">Use a local account to log in</h4>
-                </div>
+            </div>
+            <section class="panel-body ">
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @role = "form" }))
-            {
+                {
                     @Html.AntiForgeryToken()
 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -51,17 +50,13 @@
                         @Html.ActionLink("Forgot your password?", "ForgotPassword")
                     </p>
                 }
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Use another service to log in</h4>
+                    </div>
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })                
             </section>
         </div>
         </div>
-    <div class="col-md-4">
-        <div class="login-panel panel panel-default">
-            <section class="panel-body ">
-                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-                </section>
-        </div>
-    </div>
-</div>
 </div>
 
 @section Scripts {

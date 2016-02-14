@@ -2,8 +2,10 @@
     margin-top:125px;
 }
 
-.buttonheight{
-    height:50px;
+.btn-height{
+    height:45px;
+    text-align :left  ;
+    font-size :18px;
 }
 
 .budgetimage{

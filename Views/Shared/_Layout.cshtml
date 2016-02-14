@@ -27,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                    <a>Budgeter</a>
+                    <a><img src="~/img/Budget Icon (Custom) (2).PNG" /></a>
             </div>
             <!-- /.navbar-header -->
 
@@ -40,8 +40,8 @@
 
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
-                    <br /><br />
-                    <ul class="nav" id="side-menu">
+                    <br />
+                    <ul class="nav" id="side-menu">                      
                         @*<li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
@@ -53,23 +53,24 @@
                             </div>
                              /input-group 
                         </li>*@
+                        <li></li>
                         <li>
-                            @Html.ActionLink("Dashboard", "Index", "Home", null,  new { @class = "btn btn-default fa fa-dashboard buttonheight" })
+                            @Html.ActionLink("Dashboard", "Dashboard", "Households", null,  new { @class = "btn-height" })
                         </li>
                         <li>
-                            @Html.ActionLink("Accounts", "Index", "BankAccounts", null, new { @class="btn btn-default fa fa-edit buttonheight" })
+                            @Html.ActionLink("Accounts", "Index", "BankAccounts", null, new { @class= "btn-height" })
                         </li>
                         <li>
-                            @Html.ActionLink("Transactions", "Index", "Transactions", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                            @Html.ActionLink("Transactions", "Index", "Transactions", null, new { @class = "btn-height" })
                         </li>
                         <li>                                                 
-                            @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn btn-default fa fa-edit buttonheight" })                                                          
+                            @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn-height" })                                                          
                         </li>
                         <li>
-                            @Html.ActionLink("Budgets", "Index", "BudgetItems", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                            @Html.ActionLink("Budgets", "Index", "BudgetItems", null, new { @class = "btn-height" })
                         </li>
                         <li>
-                            @Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                            @Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "btn-height" })
                         </li>
                     </ul>
                 </div>
@@ -80,10 +81,6 @@
         <div id="page-wrapper">
             <div class="container body-content">
                 @RenderBody()
-                <hr />
-                <footer>
-                    <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Household Budgeter</p>
-                </footer>
             </div>
         </div>
         <!-- /#page-wrapper -->

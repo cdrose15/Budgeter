@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title - Budgeter</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!--Data Tables CSS CDN-->
+    <link href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!--Font Awesome CSS CDN-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet " />
+    <link href="~/Content/zocial.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                    <a>Budgeter</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    @Html.Partial("_LoginPartial")
+                </li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <br /><br />
+                    <ul class="nav" id="side-menu">
+                        @*<li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                             /input-group 
+                        </li>*@
+                        <li>
+                            @Html.ActionLink("Dashboard", "Dashboard", "Households", null,  new { @class = "btn btn-default fa fa-dashboard buttonheight" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Accounts", "Index", "BankAccounts", null, new { @class="btn btn-default fa fa-edit buttonheight" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Transactions", "Index", "Transactions", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                        </li>
+                        <li>                                                 
+                            @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn btn-default fa fa-edit buttonheight" })                                                          
+                        </li>
+                        <li>
+                            @Html.ActionLink("Budgets", "Index", "BudgetItems", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "btn btn-default fa fa-edit buttonheight" })
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <div id="page-wrapper">
+            <div class="container body-content">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Household Budgeter</p>
+                </footer>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!--Data Tables JS CDN-->
+    <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
