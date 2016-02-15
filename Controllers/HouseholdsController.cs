@@ -19,7 +19,7 @@ namespace Budgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
-        //GET: Households/Details-IndexView/5
+        //GET: Households/Index
         public ActionResult Index()
         {
             var user = db.Users.Find(User.Identity.GetUserId());

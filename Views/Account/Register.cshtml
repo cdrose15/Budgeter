@@ -1,14 +1,31 @@
 ﻿@model Budgeter.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    Layout = "";
 }
-
-<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title - Budgeter</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!--Data Tables CSS CDN-->
+    <link href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!--Font Awesome CSS CDN-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet " />
+    <link href="~/Content/zocial.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
         <div class="col-md-8 col-md-offset-2">
             <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">Create a new account.</h4>
-                    </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">Create a new account.</h4>
+                </div>
                 <section class="panel-body ">
                     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
@@ -52,15 +69,19 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                            <h6>Passwords must contain at least six characters including one uppercase, one number, and one special character.</h6>
+                                <h6>Passwords must contain at least six characters including one uppercase, one number, and one special character.</h6>
                             </div>
-                       </div>
+                        </div>
                     }
                 </section>
-                </div>
             </div>
         </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 
-                    @section Scripts {
-                        @Scripts.Render("~/bundles/jqueryval")
-                    }
+    <!--Data Tables JS CDN-->
+    <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+
+</body>
+</html>

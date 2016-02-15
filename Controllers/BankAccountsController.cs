@@ -17,7 +17,7 @@ namespace Budgeter.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: BankAccounts
+        //GET: BankAccounts
         public ActionResult Index()
         {
             var accounts = db.Accounts.Include(b => b.Household);
@@ -36,7 +36,7 @@ namespace Budgeter.Controllers
             {
                 return HttpNotFound();
             }
-            return View(bankAccount);
+            return View();
         }
 
         // GET: BankAccounts/Create

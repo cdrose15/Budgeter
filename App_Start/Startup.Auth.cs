@@ -48,9 +48,9 @@ namespace Budgeter
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            app.UseMicrosoftAccountAuthentication(
-                clientId: "000000004417C021",
-                clientSecret: "mpzPpPhYhWDNmuRGowFJcXoMB6tTbSWF");
+            //app.UseMicrosoftAccountAuthentication(
+            //    clientId: "000000004417C021",
+            //    clientSecret: "mpzPpPhYhWDNmuRGowFJcXoMB6tTbSWF");
 
             app.UseTwitterAuthentication(
                consumerKey: "PWmtzEvBdTMfJ2GJWBDA1WEny",
@@ -60,11 +60,11 @@ namespace Budgeter
                appId: "1679103069041937",
                appSecret: "5fe2a7ca3317a1fe43ee538fc972c481");
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "795097649471-u3lc8eva98ho7lpk6a95kvhs463ddltr.apps.googleusercontent.com",
-                ClientSecret = "aszuOjxGqphSJ8DE13d6nu_u"
-            });
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            //{
+            //    ClientId = "795097649471-u3lc8eva98ho7lpk6a95kvhs463ddltr.apps.googleusercontent.com",
+            //    ClientSecret = "aszuOjxGqphSJ8DE13d6nu_u"
+            //});
 
             app.UseLinkedInAuthentication("77cqvvlk8h3zrt", "OeXSfuGYk15VpDer");
 

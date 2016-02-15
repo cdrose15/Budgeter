@@ -226,6 +226,7 @@ namespace Budgeter.Controllers
             
             name.FirstName = user.FirstName;
             name.LastName = user.LastName;
+            name.Email = user.Email;
 
             return View(name);
         }
@@ -243,6 +244,8 @@ namespace Budgeter.Controllers
             var user = db.Users.Find(User.Identity.GetUserId());
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.UserName = model.Email;
             
             db.SaveChanges();
 

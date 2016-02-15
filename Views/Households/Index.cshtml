@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Household - @Model.Name</h2>
+<h3>Household Name: @Model.Name</h3>
 <hr />
     <div class="container">
     <div class="row">
@@ -14,7 +14,7 @@
                     <h4 class="panel-title">Invite</h4>
                 </div>
                 <section class="panel-body">
-                    <h5>Invite another user to join your household.</h5>
+                    <h5>Invite another user to join your household</h5>
                     <form id="contact-form" action="@Url.Action("Invite","HouseHolds")" method="post">
 
                         @Html.AntiForgeryToken()
@@ -36,7 +36,7 @@
                     <h4 class="panel-title">Leave</h4>
                 </div>
                 <section class="panel-body">
-                    <h5>Leave your current household and start a new one.</h5>
+                    <h5>Leave your current household and start a new one</h5>
                     <!-- Are you sure you want to leave household modal -->
                     <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal">Leave this Household</button>
                 </section>
@@ -100,7 +100,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
 

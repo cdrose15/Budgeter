@@ -1,7 +1,42 @@
-﻿Landing Page
+﻿
+    <div class="container">
+        <div class="row">
+            <div><br /><br />
+                <div class="col-md-4">
+                    <p><img src="~/img/Money Jar.png" /></p>
+                </div>
+                <div class="col-md-8">
+                    <h3 id="welcome">Welcome to Budget!</h3> 
+                    <h4>Are you looking for a better 
+                    way to keep track of your personal finances? Then you 
+                    have come to the right place! By using Budget you can 
+                    create or join an existing 'Household', which will allow 
+                    you to track your spending through Accounts and Transactions 
+                    that you or your shared members input. You can also create 
+                    a Budget to compare your actual spending through 
+                    different categories of spending. To get started please 
+                    Register or Log In.</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
-<hr />
-<footer>
-    <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Household Budgeter</p>
+    <footer class="my-footer ">
+        <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Budget</p> 
+<ul class="list-inline social-buttons">
+    <li>
+        <a href="https://www.facebook.com/Chris-Rose-Web-Developer-518959451610719" target="_blank"><i class="fa fa-facebook"></i></a>
+    </li>
+    <li>
+        <a href="https://www.linkedin.com/in/christopher-rose-403801100" target="_blank"><i class="fa fa-linkedin"></i></a>
+    </li>
+    <li>
+        <a href="https://github.com/cdrose15/Budgeter" target="_blank"><i class="fa fa-github"></i></a>
+    </li>
+</ul>
 </footer>

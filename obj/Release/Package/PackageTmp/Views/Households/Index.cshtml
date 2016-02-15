@@ -4,10 +4,44 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Household - @Model.Name</h2>
+<h3>Household Name: @Model.Name</h3>
 <hr />
     <div class="container">
     <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Invite</h4>
+                </div>
+                <section class="panel-body">
+                    <h5>Invite another user to join your household</h5>
+                    <form id="contact-form" action="@Url.Action("Invite","HouseHolds")" method="post">
+
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="Email" />
+                            <input type="hidden" name="HouseholdId" value=@Html.DisplayFor(model => model.Id)><br />
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-success">Send Invite</button>
+                        </div>
+                        <p class="text-success ">@ViewBag.SuccessMessage</p>
+                    </form>
+                </section>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Leave</h4>
+                </div>
+                <section class="panel-body">
+                    <h5>Leave your current household and start a new one</h5>
+                    <!-- Are you sure you want to leave household modal -->
+                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal">Leave this Household</button>
+                </section>
+            </div>
+        </div>
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -16,7 +50,7 @@
                     <section class="panel-body">
                         <h5>All members of this household</h5>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>
@@ -48,60 +82,24 @@
                     </section>
                 </div>
             </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Invite</h4>
-                </div>
-                <section class="panel-body">
-                    <h5>Invite another user to join your household.</h5>
-                    <form id="contact-form" action="@Url.Action("Invite","HouseHolds")" method="post">
-
-                        @Html.AntiForgeryToken()
-                        <div>
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="Email" />
-                            <input type="hidden" name="HouseholdId" value=@Html.DisplayFor(model => model.Id)><br />
-                        </div>
-                        <div>
-                            <button class="btn btn-sm btn-success">Send Invite</button>
-                        </div>
-                        <p class="text-success ">@ViewBag.SuccessMessage</p>
-                    </form>
-                </section>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Leave</h4>
-                </div>
-                <section class="panel-body">
-                    <h5>Leave your current household and start a new one.</h5>
-                    <!-- Are you sure you want to leave household modal -->
-                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal">Leave this Household</button>
-                </section>
-            </div>
-        </div>
     </div>
 </div>
         <!-- Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
-                <div class="modal-content panel panel-default">
-                    <div class="modal-header panel-heading">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title panel-title">Leave Household</h4>
+                        <h4 class="panel-title">Leave Household</h4>
                     </div>
-                    <div class="modal-body panel-body">
+                    <div class="panel-body">
                         <form method="Post" action="@Url.Action("Leave","Households")">
                             <h5>Are you sure you want to leave this household? This cannot be undone.</h5>
                             <input type="submit" value="Leave this Household" class="btn btn-sm btn-danger" />
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
 
