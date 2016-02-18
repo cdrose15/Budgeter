@@ -221,7 +221,6 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
-    <Compile Include="Controllers\CategoryListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -329,24 +328,18 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\BankAccounts\_Create.cshtml" />
-    <Content Include="Views\BankAccounts\Delete.cshtml" />
-    <Content Include="Views\BankAccounts\Details.cshtml" />
+    <Content Include="Views\BankAccounts\_Delete.cshtml" />
     <Content Include="Views\BankAccounts\_Edit.cshtml" />
     <Content Include="Views\BudgetItems\Create.cshtml" />
     <Content Include="Views\BudgetItems\Delete.cshtml" />
     <Content Include="Views\BudgetItems\Details.cshtml" />
     <Content Include="Views\BudgetItems\Edit.cshtml" />
     <Content Include="Views\BudgetItems\Index.cshtml" />
-    <Content Include="Views\Categories\Create.cshtml" />
-    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\_Create.cshtml" />
+    <Content Include="Views\Categories\_Delete.cshtml" />
     <Content Include="Views\Categories\Details.cshtml" />
-    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\_Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
-    <Content Include="Views\CategoryLists\Create.cshtml" />
-    <Content Include="Views\CategoryLists\Delete.cshtml" />
-    <Content Include="Views\CategoryLists\Details.cshtml" />
-    <Content Include="Views\CategoryLists\Edit.cshtml" />
-    <Content Include="Views\CategoryLists\Index.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\Index.cshtml" />
     <Content Include="Views\Transactions\Create.cshtml" />
@@ -358,6 +351,7 @@
     <Content Include="Views\Households\Dashboard.cshtml" />
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\BankAccounts\Index.cshtml" />
+    <Content Include="Views\BankAccounts\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

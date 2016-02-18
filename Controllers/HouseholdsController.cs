@@ -133,6 +133,21 @@ namespace Budgeter.Controllers
                     await ControllerContext.HttpContext.RefreshAuthentication(user);
                     db.SaveChanges();
 
+                    // Populate CategoryList to new Households Category
+                    var Cats = db.CategoryLists.ToList();
+                    var catsList = new List<Category>();
+                    foreach (var cat in Cats)
+                    {
+                        var category = new Category()
+                        {
+                            Name = cat.Name,
+                            HouseholdId = household.Id
+                        };
+                        catsList.Add(category);
+                    }
+                    db.Categories.AddRange(catsList);
+                    db.SaveChanges();
+
                     return RedirectToAction("Index", new { id = hh.Id });
                 }
                 else

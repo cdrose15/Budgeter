@@ -10,7 +10,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <!--Data Tables CSS CDN-->
-    <link href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link  rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css"/>
     <!--Font Awesome CSS CDN-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet " />
     <link href="~/Content/zocial.css" rel="stylesheet" />
@@ -59,9 +59,6 @@
                         <li>
                             @Html.ActionLink("Accounts", "Index", "BankAccounts", null, new { @class= "btn-height" })
                         </li>
-                        <li>
-                            @Html.ActionLink("Transactions", "Index", "Transactions", null, new { @class = "btn-height" })
-                        </li>
                         <li>                                                 
                             @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn-height" })                                                          
                         </li>
@@ -91,7 +88,7 @@
     @Scripts.Render("~/bundles/bootstrap")
 
     <!--Data Tables JS CDN-->
-    <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 
     @RenderSection("scripts", required: false)
 

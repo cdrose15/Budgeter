@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">Manage</h4>
@@ -38,37 +38,39 @@
                                         }
                                     </td>
                                     <td>
+                                        @Html.ActionLink("View Transactions", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
                                         <button class="edit-button btn btn-sm btn-success" data-id="@item.Id" type="button">Edit</button>
-                                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-success edit-button" })*@
-                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger"})
-      
+                                        <button class="delete-button btn btn-sm btn-danger" data-id="@item.Id" type="button">Delete</button>     
                                     </td>
                                 </tr>
                             }
                         </table>
                        </div>
+                    @Html.ActionLink("View All Transactions", "Index", "Transactions", null, new { @class = "btn btn-sm btn-success" })
+
+
                     </section> 
                 </div> 
-            <div>
-                @Html.Action("_Create", "BankAccounts")
-            </div>
           </div> 
-        <div id="edit-div">
-            @Html.Action("_Edit", "BankAccounts", Model)
+        <div>
+            @Html.Action("_Create", "BankAccounts")
         </div>
+        <div id="edit-div" class="delete-div"></div>
     </div>
 </div>
 
 @section scripts{
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-        $(function () {
+       
             $('.edit-button').click(function () {
-                $('#edit-div').load('/BankAccounts/Edit/' + $(this).data('id'));
+                $('#edit-div').load('/BankAccounts/_Edit/' + $(this).data('id'));
             });
-        });
+
+            $('.delete-button').click(function () {
+                $('.delete-div').load('/BankAccounts/_Delete/' + $(this).data('id'));
+            });
+        
     </script>
     }
 

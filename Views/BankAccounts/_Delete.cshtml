@@ -1,26 +1,21 @@
 ﻿@model Budgeter.Models.CodeFirst.BankAccount
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Delete", "BankAccounts"))
     {
         @Html.AntiForgeryToken()
-            <div class="form-horizontal ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="login-panel panel panel-default">
+        @Html.HiddenFor(model => model.Id)
+
+                        <div class="col-md-5">
+                            <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Delete Account</h4>
                                 </div>
                                 <section class="panel-body ">
                                     <div class="form-actions no-color">
                                         <h5>Are you sure you want to delete '@Model.Name' ?</h5>
-                                        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-sm btn-success" })
                                         <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
                                     </div>
                                     </section>
                              </div>
-                        </div>
-                    </div>
-                </div>
-        </div>                            
+                        </div>                       
     }

@@ -20,7 +20,8 @@ namespace Budgeter.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            var categories = db.Categories.Include(c => c.Household);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categories = db.Categories.Where(c => c.HouseholdId == user);
             return View(categories.ToList());
         }
 
@@ -40,10 +41,9 @@ namespace Budgeter.Controllers
         }
 
         // GET: Categories/Create
-        public ActionResult Create()
+        public PartialViewResult _Create()
         {
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: Categories/Create
@@ -55,29 +55,22 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+                category.HouseholdId = user;               
                 db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", category.HouseholdId);
             return View(category);
         }
 
         // GET: Categories/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", category.HouseholdId);
-            return View(category);
+
+            return PartialView(category);
         }
 
         // POST: Categories/Edit/5
@@ -93,23 +86,15 @@ namespace Budgeter.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", category.HouseholdId);
             return View(category);
         }
 
         // GET: Categories/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
+
+            return PartialView(category);
         }
 
         // POST: Categories/Delete/5

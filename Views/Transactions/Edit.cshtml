@@ -54,11 +54,13 @@
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.Type, "Expense", htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
-                                        <div class="checkbox">
-                                            @Html.EditorFor(model => model.Type)
-                                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                                        </div>
+                                        @Html.RadioButton("Type", true, htmlAttributes: new { @class = "radio" })
+                                    </div><br /><br />
+                                    @Html.LabelFor(model => model.Type, "Income", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.RadioButton("Type", false, htmlAttributes: new { @class = "radio" })
                                     </div>
+                                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                                 </div>
 
                                 <div class="form-group">

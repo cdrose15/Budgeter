@@ -86,7 +86,9 @@
                                     </td>
                                     <td>
                                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
-                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                                        @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })*@
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
+
                                     </td>
                                 </tr>
                             }
@@ -98,3 +100,21 @@
             </div> 
         </div> 
     </div> 
+        <!-- Modal -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="panel-title">Delete Transaction</h4>
+            </div>
+            <div class="panel-body">
+                <form method="Post" action="@Url.Action("Delete","Transaction")">
+                    <h5>Are you sure you want to delete this transaction?</h5>
+                    <input type="submit" value="Leave this Household" class="btn btn-sm btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

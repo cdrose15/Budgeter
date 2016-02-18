@@ -1,43 +1,120 @@
-﻿
-@model Budgeter.Models.CodeFirst.BankAccount
-
+﻿@model Budgeter.Models.CodeFirst.BankAccount
 @{
     ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h3>Transactions</h3>
+<hr />
 
-<div>
-    <h4>BankAccount</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </dt>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                @Html.ActionLink("Add New", "Create", "Transactions", null, new { @class = "btn btn-sm btn-success" })
+            </p>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Manage</h4>
+                </div>
+                <section class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <tr>
+                                <th>
+                                    Account
+                                </th>
+                                <th>
+                                    Category
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Expense
+                                </th>
+                                <th>
+                                    Income
+                                </th>
+                                <th>
+                                    Reconciled
+                                </th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th></th>
+                            </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Household.Name)
-        </dd>
+                            @foreach (var item in Model.Transactions )
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BankAccount.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @item.Date.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @if (item.Type == true)
+                                        {
+                                            <i class="fa fa-times fa-1"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Type == false)
+                                        {
+                                            <i class="fa fa-times fa-1"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Reconciled == true)
+                                        {
+                                            <i class="fa fa-check fa-1"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", "Transactions", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
+                                        @*@Html.ActionLink("Delete", "Delete", "Transactions", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })*@
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
+                                        <button></button>
+                                    </td>
+                                </tr>
+                            }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Balance)
-        </dd>
-
-    </dl>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div> 
+        <!-- Modal -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="panel-title">Delete Transaction</h4>
+            </div>
+            <div class="panel-body">
+                <form method="Post" action="@Url.Action("Delete","Transaction")">
+                    <h5>Are you sure you want to delete this transaction?</h5>
+                    <input type="submit" value="Leave this Household" class="btn btn-sm btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

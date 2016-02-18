@@ -5,14 +5,15 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNet.Identity.Owin; 
+using Microsoft.AspNet.Identity.Owin;
+using Budgeter.Models.CodeFirst;
 
 namespace Budgeter.Models
 {
-
-
     public static class Extentions
-    { 
+    {
+        private static ApplicationDbContext db = new ApplicationDbContext();
+
         public static string GetHouseholdId(this IIdentity user)
         {
             var claimsIdentity = (ClaimsIdentity)user;

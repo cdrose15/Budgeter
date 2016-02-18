@@ -64,6 +64,21 @@ namespace Budgeter.Controllers
             return View(bankAccount);
         }
 
+        // GET: Categories/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            BankAccount bankAccount = db.Accounts.Find(id);
+            if (bankAccount  == null)
+            {
+                return HttpNotFound();
+            }
+            return View(bankAccount);
+        }
+
         // GET: BankAccounts/Edit/5
         public PartialViewResult _Edit(int? id)
         {
@@ -90,18 +105,11 @@ namespace Budgeter.Controllers
         }
 
         // GET: BankAccounts/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             BankAccount bankAccount = db.Accounts.Find(id);
-            if (bankAccount == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bankAccount);
+
+            return PartialView(bankAccount);
         }
 
         // POST: BankAccounts/Delete/5
