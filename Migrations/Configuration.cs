@@ -1,6 +1,8 @@
 namespace Budgeter.Migrations
 {
+    using Models.CodeFirst;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -26,6 +28,19 @@ namespace Budgeter.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            context.CategoryLists.AddRange(
+                new List<CategoryList>() {
+                new CategoryList { Name = "Income" },
+                new CategoryList { Name = "Automobile" },
+                new CategoryList { Name = "Food" },
+                new CategoryList { Name = "Clothing" },
+                new CategoryList { Name = "Home" },
+                new CategoryList { Name = "Utilities" },
+                new CategoryList { Name = "Pet" },
+                new CategoryList { Name = "Loans" }
+                });
+                
         }
     }
 }

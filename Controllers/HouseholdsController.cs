@@ -9,24 +9,26 @@ using System.Web.Mvc;
 using Budgeter.Models;
 using Budgeter.Models.CodeFirst;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-    [Authorize]
+   
     public class HouseholdsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
         //GET: Households/Index
+        [AuthorizeHouseholdRequired]
         public ActionResult Index()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Find(user.HouseholdId);
             if (household == null)
             {
-                return RedirectToAction ("Create","Households");
+                return RedirectToAction("Create", "Households");
             }
 
             ViewBag.SuccessMessage = TempData["successMessage"];
@@ -35,30 +37,34 @@ namespace Budgeter.Controllers
 
         [HttpGet]
         //GET: Households/Join
+
         public ActionResult Join()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         //POST: Households/Join
-        public ActionResult Join(string Code)
+        public async Task<ActionResult> Joins(string Code)
         {
             if (ModelState.IsValid)
             {
                 var user = db.Users.Find(User.Identity.GetUserId());
 
-                if (user.HouseholdId == null)
+                if (user == null)
                 {
                     var currUserEmail = User.Identity.GetUserName();
                     var invite = db.Invites.FirstOrDefault(c => c.InviteCode == Code && c.UserEmail == currUserEmail);
                     if (invite != null)
                     {
-                        //Household household = db.Households.Find(Id);
                         user.HouseholdId = invite.HouseholdId;
                         db.Invites.Remove(invite);
+                        // Refreshauthentication() call
+                        var userid = User.Identity.GetUserId();
+                        await ControllerContext.HttpContext.RefreshAuthentication(user);
                         db.SaveChanges();
-                        return RedirectToAction("Index", new { id = user.HouseholdId });
+                        return RedirectToAction("Index", new { id = user });
                     }
                     else
                     {
@@ -68,7 +74,7 @@ namespace Budgeter.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", new { id = user.HouseholdId });
+                    return RedirectToAction("Index", new { id = user });
                 }            
             }
             TempData["errorMessage"] = "An error has occurred";
@@ -77,13 +83,22 @@ namespace Budgeter.Controllers
 
         [HttpPost]
         // POST: Households/Leave
-        public ActionResult Leave()
-        {
-                var user = db.Users.Find(User.Identity.GetUserId());
-                user.HouseholdId = null;
-                db.SaveChanges();
+        [AuthorizeHouseholdRequired]
 
-                return RedirectToAction("Create","Households");           
+        public async Task<ActionResult> Leave()
+        {
+            //var user = User.Identity.GetHouseholdId();
+            // user = null;
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            user.HouseholdId = null;
+            // Refreshauthentication() call
+            var userid = User.Identity.GetUserId();
+            await ControllerContext.HttpContext.RefreshAuthentication(user);
+            db.SaveChanges();
+
+            return RedirectToAction("Create","Households");           
         }
 
         [HttpGet]
@@ -98,8 +113,9 @@ namespace Budgeter.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Household household)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] Household household)
         {
             if (ModelState.IsValid)
             {
@@ -112,6 +128,9 @@ namespace Budgeter.Controllers
 
                     var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
                     user.HouseholdId = hh.Id;
+                    // Refreshauthentication() call
+                    var userid = User.Identity.GetUserId();
+                    await ControllerContext.HttpContext.RefreshAuthentication(user);
                     db.SaveChanges();
 
                     return RedirectToAction("Index", new { id = hh.Id });
@@ -128,6 +147,8 @@ namespace Budgeter.Controllers
 
         // POST: Households/Invite
         [HttpPost]
+        [AuthorizeHouseholdRequired]
+
         public ActionResult Invite(ContactMessage sendemail)
         {
 
@@ -166,6 +187,8 @@ namespace Budgeter.Controllers
 
         // GET: Households/Dashboard
         [HttpGet]
+        [AuthorizeHouseholdRequired]
+
         public ActionResult Dashboard()
         {
             return View();

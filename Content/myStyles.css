@@ -28,3 +28,11 @@ h1,h2,h3,h4,h5,h6{
 #welcome{
     text-align :center;
 }
+
+
+/** {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+}*/
+

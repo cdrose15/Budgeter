@@ -1,14 +1,14 @@
 ﻿@model Budgeter.Models.CodeFirst.BankAccount
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Edit", "BankAccounts"))
     {
         @Html.AntiForgeryToken()
 
-            <div class="form-horizontal ">
-                @*<div class="container">*@
-                    <div class="row">
+            @*<div class="form-horizontal ">
+                <div class="container">
+                    <div class="row">*@
                         <div class="col-md-6">
-                            <div class="login-panel panel panel-default">
+                            <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Edit Account</h4>
                                 </div>
@@ -16,6 +16,7 @@
 
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     @Html.HiddenFor(model => model.Balance)
+                                    @Html.HiddenFor(model => model.HouseholdId)
 
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -33,11 +34,12 @@
                                   </section> 
                                 </div>
                             </div>
-                        </div> 
+    }
+                        @*</div> 
                     </div> 
-                @*</div>*@ 
+                </div> 
                             }
 
                             @section Scripts {
                                 @Scripts.Render("~/bundles/jqueryval")
-                            }
+                            }*@

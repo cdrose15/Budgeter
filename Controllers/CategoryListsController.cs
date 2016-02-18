@@ -12,7 +12,7 @@ using Budgeter.Models.CodeFirst;
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class CategoryListsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

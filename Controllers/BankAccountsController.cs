@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Budgeter.Models;
 using Budgeter.Models.CodeFirst;
+using Microsoft.AspNet.Identity;
 
 namespace Budgeter.Controllers
 {
@@ -18,32 +19,30 @@ namespace Budgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         //GET: BankAccounts
-        public ActionResult Index()
+        [AuthorizeHouseholdRequired]
+        public ActionResult Index(BankAccount bankAccount)
         {
-            var accounts = db.Accounts.Include(b => b.Household);
-            return View(accounts.ToList());
-        }
+            var HHidS = User.Identity.GetHouseholdId();
+            int HHid;
+            if (!string.IsNullOrWhiteSpace(HHidS))
+            {
+                HHid = Convert.ToInt32(HHidS);
+            }
+            else
+                HHid = 0;
+            //var HHid = !string.IsNullOrWhiteSpace(HHidS) ?Convert.ToInt32(HHidS): 0;
+            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid);
 
-        // GET: BankAccounts/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BankAccount bankAccount = db.Accounts.Find(id);
-            if (bankAccount == null)
-            {
-                return HttpNotFound();
-            }
-            return View();
+            ViewBag.Overdraft = "Overdraft Warning";
+            
+            return View(accounts.ToList());
+            
         }
 
         // GET: BankAccounts/Create
-        public ActionResult Create()
+        public PartialViewResult _Create()
         {
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: BankAccounts/Create
@@ -51,33 +50,26 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeHouseholdRequired]
         public ActionResult Create([Bind(Include = "Id,Name,Balance,HouseholdId")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
+                var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+                bankAccount.HouseholdId = user;
                 db.Accounts.Add(bankAccount);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", bankAccount.HouseholdId);
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             BankAccount bankAccount = db.Accounts.Find(id);
-            if (bankAccount == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", bankAccount.HouseholdId);
-            return View(bankAccount);
+       
+            return PartialView(bankAccount);
         }
 
         // POST: BankAccounts/Edit/5
@@ -85,6 +77,7 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeHouseholdRequired]
         public ActionResult Edit([Bind(Include = "Id,Name,Balance,HouseholdId")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
@@ -93,7 +86,6 @@ namespace Budgeter.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", bankAccount.HouseholdId);
             return View(bankAccount);
         }
 
@@ -115,6 +107,7 @@ namespace Budgeter.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AuthorizeHouseholdRequired]
         public ActionResult DeleteConfirmed(int id)
         {
             BankAccount bankAccount = db.Accounts.Find(id);

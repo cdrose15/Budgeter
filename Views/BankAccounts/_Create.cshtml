@@ -1,16 +1,16 @@
 ﻿@model Budgeter.Models.CodeFirst.BankAccount
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "BankAccounts"))
 {
     @Html.AntiForgeryToken()
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-horizontal ">
-        @*<div class="container">*@
+    @*<div class="form-horizontal ">
+        <div class="container">
            <div class="row">
-            <div class="col-md-6">
-                <div class="login-panel panel panel-default">
+            <div class="col-md-6">*@
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Create Account</h4>
                     </div>
@@ -46,13 +46,13 @@
                         </div>
                         </section> 
                 </div>
-                </div> 
+                @*</div> 
                </div>
             </div> 
-        @*</div>*@
+        </div>*@
         
                 }
 
-                @section Scripts {
+                @*@section Scripts {
                     @Scripts.Render("~/bundles/jqueryval")
-                }
+                }*@

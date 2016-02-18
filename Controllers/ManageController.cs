@@ -13,7 +13,7 @@ using System.Data.Entity;
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class ManageController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

@@ -17,8 +17,10 @@ namespace Budgeter.Models.CodeFirst
         [Required]
         public string Name { get; set; }
         public int? HouseholdId { get; set; }
+        public int CategoryListId { get; set; }
 
         public virtual Household Household { get; set; }
+        public virtual CategoryList CategoryList { get; set; }
 
         public virtual ICollection<Transaction > Transactions { get; set; }
     }
