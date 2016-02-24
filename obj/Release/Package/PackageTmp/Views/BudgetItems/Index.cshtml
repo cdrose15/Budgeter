@@ -5,7 +5,7 @@
 
             <div class="container">
                 <div class="table-responsive col-md-7">
-                    <table id="budget" class="display">
+                    <table id="budget" class="compact display">
                         <thead>
                             <tr>
                                 <th>
@@ -42,7 +42,9 @@
                                     </td>
                                     <td>
                                         <a class="editbudgetitem-button btn" data-id="@item.Id" id="icons"><i class="fa fa-pencil-square-o"></i></a>
-                                        <a class="deletebudgetitem-button btn" data-id="@item.Id" id="icons"><i class="fa fa-trash-o"></i></a>
+                                        @*<a class="deletebudgetitem-button btn" data-id="@item.Id" id="icons"><i class="fa fa-trash-o"></i></a>*@
+                                        <a class="deletebudgetitem-button btn" data-toggle="modal" data-target="#myModal" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>
+
                                     </td>
                                 </tr>
                             }
@@ -53,16 +55,39 @@
                 <div id="budget-partial-div">
                     @Html.Action("_Create","BudgetItems")
                 </div>
-
+                <div class="text-success">
+                    @ViewBag.successMessage
+                </div>
+                <div><h5>*All budget items are on a per month basis.</h5></div>
              </div> 
-<h5>*All budget items are on a per month basis.</h5>
+
+        <!-- Modal -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="panel-title">Delete Budget Item</h4>
+            </div>
+            <div class="panel-body">
+                <form method="Post" action="@Url.Action("Delete","BudgetItems")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="delete-id" name="id" value="" />
+                    <h5>Are you sure you want to Delete this Budget Item?</h5>
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
                     @section scripts{
 
                         <script type="text/javascript">
 
                             $('.deletebudgetitem-button').click(function () {
-                                $('#budget-partial-div').load('/BudgetItems/_Delete/' + $(this).data('id'));
+                                $('#delete-id').val($(this).data('id'));
                             });
 
                             $('.editbudgetitem-button').click(function () {

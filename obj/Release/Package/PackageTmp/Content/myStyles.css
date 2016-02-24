@@ -46,6 +46,11 @@ h1,h2,h3,h4,h5,h6{
 .panel-body{
     background-color:#FBFBFB;
 }
+
+.modal-dialog {
+    width: 400px;
+    margin: 120px auto;
+}
 /** {
   background: #000 !important;
   color: #0f0 !important;

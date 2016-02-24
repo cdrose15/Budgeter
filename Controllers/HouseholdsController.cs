@@ -10,11 +10,12 @@ using Budgeter.Models;
 using Budgeter.Models.CodeFirst;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-   
+
     public class HouseholdsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -75,10 +76,10 @@ namespace Budgeter.Controllers
                 else
                 {
                     return RedirectToAction("Index", new { id = user });
-                }            
+                }
             }
             TempData["errorMessage"] = "An error has occurred";
-            return RedirectToAction("Create","Households");
+            return RedirectToAction("Create", "Households");
         }
 
         [HttpPost]
@@ -96,7 +97,7 @@ namespace Budgeter.Controllers
             await ControllerContext.HttpContext.RefreshAuthentication(user);
             db.SaveChanges();
 
-            return RedirectToAction("Create","Households");           
+            return RedirectToAction("Create", "Households");
         }
 
         [HttpGet]
@@ -176,7 +177,7 @@ namespace Budgeter.Controllers
             invite.InviteCode = keycode;
 
             var duplicates = db.Invites.Where(i => i.UserEmail == sendemail.Email);
-            foreach(var duplicate in duplicates)
+            foreach (var duplicate in duplicates)
             {
                 db.Invites.Remove(duplicate);
             }
@@ -206,6 +207,47 @@ namespace Budgeter.Controllers
         public ActionResult Dashboard()
         {
             return View();
+        }
+
+        public ActionResult DonutChartDashboard()
+        {
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var spending = db.Transactions.Where(s => s.BankAccount.HouseholdId == user && s.Type == true 
+                && s.BankAccount.IsDeleted == false && s.Date.Year == DateTime.Now.Year &&
+                s.Date.Month == DateTime.Now.Month).Select(s => s.Amount).DefaultIfEmpty().Sum();
+            var income = db.Transactions.Where(i => i.BankAccount.HouseholdId == user && i.Type == false 
+                && i.BankAccount.IsDeleted == false && i.Date.Year == DateTime.Now.Year &&
+                i.Date.Month == DateTime.Now.Month).Select(i => i.Amount).DefaultIfEmpty().Sum();
+
+            var data = new[] { new { label = "Total Income $", value = (int)income },
+               new { label = "Total Expense $", value = (int)spending } };
+
+            return Content(JsonConvert.SerializeObject(data), "application/json");
+        }
+
+        public ActionResult BarChartDashboard()
+        {
+            var user = db.Households.Find(Convert.ToInt32(User.Identity.GetHouseholdId()));
+
+            var chartList = (from cat in user.Categories
+                             let sumBudget = (from bud in user.BudgetItems
+                                              where cat.IsDeleted == false
+                                              select bud.Amount
+                                              ).DefaultIfEmpty().Sum()
+                             let sumActual = (from tran in cat.Transactions
+                                              where tran.BankAccount.IsDeleted == false       
+                                              && tran.Date.Year == DateTime.Now.Year
+                                              && tran.Date.Month == DateTime.Now.Month
+                                              select tran.Amount
+                                              ).DefaultIfEmpty().Sum()
+                             select new
+                             {
+                                 y = cat.Name,
+                                 a = sumBudget,
+                                 b = sumActual
+                             }).ToArray();
+               
+            return Content(JsonConvert.SerializeObject(chartList), "application/json");
         }
 
         protected override void Dispose(bool disposing)

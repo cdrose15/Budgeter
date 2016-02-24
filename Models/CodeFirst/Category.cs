@@ -11,6 +11,7 @@ namespace Budgeter.Models.CodeFirst
         public Category()
         {
             this.Transactions = new HashSet<Transaction>();
+            this.BudgetItems = new HashSet<BudgetItem>();
         }
 
         public int Id { get; set; }
@@ -21,5 +22,6 @@ namespace Budgeter.Models.CodeFirst
 
         public virtual Household Household { get; set; }
         public virtual ICollection<Transaction > Transactions { get; set; }
+        public virtual ICollection<BudgetItem> BudgetItems { get; set; }
     }
 }

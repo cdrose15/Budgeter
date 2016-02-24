@@ -24,7 +24,7 @@ namespace Budgeter.Controllers
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.OrderByDescending(t => t.Date).Where(t => t.BankAccountId == t.BankAccount.Id &&
                 t.BankAccount.HouseholdId == user);
-            return PartialView(transactions.ToList().Take(4));
+            return PartialView(transactions.ToList().Take(5));
         }
 
         // GET: Transactions/Create

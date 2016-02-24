@@ -5,43 +5,44 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            <div id="bar-chart" style="height:250px;"></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
         <div class="col-md-5">
             <div>@Html.Action("_TransactionList", "Transactions")</div>
         </div> 
         <div class="col-md-7">
             <div>@Html.Action("_AccountList", "BankAccounts")</div>
-            <div id="donut-chart"></div>
-        </div>
-        <div class="col-md-12">
-            <div id="bar-chart"></div>
+            <div id="donut-chart" style="height:200px;"></div>
         </div>
     </div> 
 </div> 
 
 @section scripts{
-    <script>
-Morris.Bar({
-  element: 'bar-chart',
-  data: [
-    { y: '2006', a: 100, b: 90 },
-    { y: '2007', a: 75,  b: 65 },
-    { y: '2008', a: 50,  b: 40 },
-    { y: '2009', a: 75,  b: 65 },
-    { y: '2010', a: 50,  b: 40 },
-    { y: '2011', a: 75,  b: 65 },
-    { y: '2012', a: 100, b: 90 }
-  ],
-  xkey: 'y',
-  ykeys: ['a', 'b'],
-  labels: ['Series A', 'Series B']
-});
 
-    Morris.Donut({
-  element: 'donut-chart',
-  data: [
-    {label: "Income", value: 100},
-    {label: "Expense", value: 75 },
-  ]
-});
-</script>
+    <script>
+        $.post('@Url.Action("DonutChartDashboard","Households")').then(function (response) {
+            new Morris.Donut({
+                element: 'donut-chart',
+                data: response,
+                resize: true
+            });
+        });
+
+        $.post('@Url.Action("BarChartDashboard","Households")').then(function (response) {
+            new Morris.Bar({
+                element: 'bar-chart',
+                data: response,
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                labels: ['Budget', 'Actual'],
+                resize: true
+            });
+        });
+
+    </script>
 }

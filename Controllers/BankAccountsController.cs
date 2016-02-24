@@ -164,7 +164,7 @@ namespace Budgeter.Controllers
             }
             else
                 HHid = 0;
-            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid);
+            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid && b.IsDeleted != true);
 
             ViewBag.OverdraftWarning = "Overdraft Warning";
             ViewBag.Overdraft = "Overdraft Notice";
