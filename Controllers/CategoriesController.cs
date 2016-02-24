@@ -21,23 +21,11 @@ namespace Budgeter.Controllers
         public ActionResult Index()
         {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var categories = db.Categories.Where(c => c.HouseholdId == user);
-            return View(categories.ToList());
-        }
+            var categories = db.Categories.Where(c => c.HouseholdId == user && c.IsDeleted != true).OrderBy(c => c.Name);
 
-        // GET: Categories/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
+            ViewBag.SuccessMessage = TempData["successMessage"];
+
+            return View(categories.ToList());
         }
 
         // GET: Categories/Create
@@ -102,12 +90,28 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //    Category category = db.Categories.Find(id);
+            //    if (category.Name == "Misc.")
+            //    {
+            //        TempData["errorMessage"] = "Sorry, you cannot delete this category";
+            //        return RedirectToAction("Index");
+            //    }
+            //    else
+            //    {
+            //        db.Categories.Remove(category);
+            //        db.SaveChanges();
+            //        TempData["successMessage"] = "Category successfully deleted";
+            //        return RedirectToAction("Index");
+            //    }
+            //}
+
             Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            category.IsDeleted = true;
             db.SaveChanges();
+            TempData["successMessage"] = "Category successfully deleted";
             return RedirectToAction("Index");
         }
-
+          
         protected override void Dispose(bool disposing)
         {
             if (disposing)

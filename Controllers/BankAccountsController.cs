@@ -30,13 +30,12 @@ namespace Budgeter.Controllers
             }
             else
                 HHid = 0;
-            //var HHid = !string.IsNullOrWhiteSpace(HHidS) ?Convert.ToInt32(HHidS): 0;
-            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid);
+            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid && b.IsDeleted != true);
 
-            ViewBag.Overdraft = "Overdraft Warning";
-            
-            return View(accounts.ToList());
-            
+            ViewBag.OverdraftWarning = "Overdraft Warning";
+            ViewBag.Overdraft = "Overdraft Notice";
+            ViewBag.ErrorMessage = TempData["errorMessage"];
+            return View(accounts.ToList());            
         }
 
         // GET: BankAccounts/Create
@@ -51,14 +50,26 @@ namespace Budgeter.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeHouseholdRequired]
-        public ActionResult Create([Bind(Include = "Id,Name,Balance,HouseholdId")] BankAccount bankAccount)
+        public ActionResult Create([Bind(Include = "Id,Name,Balance,HouseholdId,ReconciledBalance")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
                 var user = Convert.ToInt32(User.Identity.GetHouseholdId());
                 bankAccount.HouseholdId = user;
+                bankAccount.ReconciledBalance = bankAccount.Balance;
                 db.Accounts.Add(bankAccount);
                 db.SaveChanges();
+
+                Transaction transaction = new Transaction();
+                transaction.Amount = bankAccount.Balance;
+                transaction.Description = "Initial Deposit";
+                transaction.Date = DateTime.Now;
+                transaction.Type = false;
+                transaction.BankAccountId = bankAccount.Id;
+                transaction.Reconciled = true;
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(bankAccount);
@@ -72,9 +83,18 @@ namespace Budgeter.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount bankAccount = db.Accounts.Find(id);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var transactions = db.Transactions.OrderBy(t => t.Date).Where(t => t.BankAccountId  == t.BankAccount.Id &&
+                t.BankAccount.HouseholdId == user).Include(t => t.Category);
             if (bankAccount  == null)
             {
                 return HttpNotFound();
+            }
+
+            if(bankAccount.IsDeleted == true)
+            {
+                ViewBag.IsDeletedMessage = "This account has been deleted. You can only view transactions.";
+                return View(bankAccount);
             }
             return View(bankAccount);
         }
@@ -119,9 +139,37 @@ namespace Budgeter.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             BankAccount bankAccount = db.Accounts.Find(id);
-            db.Accounts.Remove(bankAccount);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (bankAccount.Balance == 0)
+            {
+                bankAccount.IsDeleted = true;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["errorMessage"] = "Account balance must be $0 in order to delete, please manually move your remaining balance to another account";
+                return RedirectToAction("Index");
+            }
+         
+        }
+
+        // GET: BankAccounts/_AccountList
+        public PartialViewResult _AccountList(BankAccount bankAccount)
+        {
+            var HHidS = User.Identity.GetHouseholdId();
+            int HHid;
+            if (!string.IsNullOrWhiteSpace(HHidS))
+            {
+                HHid = Convert.ToInt32(HHidS);
+            }
+            else
+                HHid = 0;
+            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid);
+
+            ViewBag.OverdraftWarning = "Overdraft Warning";
+            ViewBag.Overdraft = "Overdraft Notice";
+
+            return PartialView(accounts.ToList());
         }
 
         protected override void Dispose(bool disposing)

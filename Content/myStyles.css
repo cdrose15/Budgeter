@@ -29,7 +29,23 @@ h1,h2,h3,h4,h5,h6{
     text-align :center;
 }
 
+.editcat-button .fa, .deletecat-button .fa, .edit-button .fa, .delete-button .fa, 
+    .edittran-button .fa, .deletetran-button .fa, .editbudgetitem-button .fa,
+    .deletebudgetitem-button .fa{
+    font-size:20px;
+}
 
+.negative{
+    color:red;
+}
+
+#page-wrapper{
+    background-color:#FBFBFB;
+}
+
+.panel-body{
+    background-color:#FBFBFB;
+}
 /** {
   background: #000 !important;
   color: #0f0 !important;

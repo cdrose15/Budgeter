@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Budgeter.Models.CodeFirst.BankAccount>
+
+            @*<div class="panel-heading">
+                <h4 class="panel-title">All Accounts</h4>
+            </div>*@
+            <section class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Available</th>
+                                <th>Reconciled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @if (item.Balance < 0)
+                                        {
+                                            <p class="negative">$@item.Balance</p>
+                                        }
+                                        @if (item.Balance >= 0)
+                                        {
+                                            <p>$@item.Balance</p>
+                                        }
+
+                                        @if (item.Balance < 50 && item.Balance > 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.OverdraftWarning</p>
+                                        }
+                                        @if (item.Balance < 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.Overdraft</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.ReconciledBalance < 0)
+                                        {
+                                            <p class="negative">$@item.ReconciledBalance</p>
+                                        }
+                                        @if (item.ReconciledBalance >= 0)
+                                        {
+                                            <p>$@item.ReconciledBalance</p>
+                                        }
+
+                                        @if (item.ReconciledBalance < 50 && item.ReconciledBalance > 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.OverdraftWarning</p>
+                                        }
+                                        @if (item.ReconciledBalance < 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.Overdraft</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Transactions", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+

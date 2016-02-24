@@ -1,0 +1,25 @@
+﻿@model Budgeter.Models.CodeFirst.BudgetItem
+
+@using (Html.BeginForm("Delete", "BudgetItems"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal ">
+        <div class="container">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Delete Transaction</h4>
+                    </div>
+                    <section class="panel-body ">
+                        <div class="form-actions no-color">
+                            <h5>Are you sure you want to delete the Budget Item '@Model.Name'</h5>
+                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-sm btn-default" })
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+  }

@@ -12,6 +12,7 @@ namespace Budgeter.Models.CodeFirst
         public string NameId { get; set; }
         public int HouseholdId { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string UserEmail { get; set; }
         [Required]
         public string InviteCode { get; set; }

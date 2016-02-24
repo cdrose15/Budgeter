@@ -1,63 +1,87 @@
 ﻿@model IEnumerable<Budgeter.Models.CodeFirst.BudgetItem>
 
-@{
-    ViewBag.Title = "Index";
-}
+<h3>Budget Items</h3>
+<hr />
 
-<h3>Budgets</h3>
+            <div class="container">
+                <div class="table-responsive col-md-7">
+                    <table id="budget" class="display">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Category
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    Amount / Month
+                                </th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @if (item.Type == true)
+                                        {
+                                            <p class="negative">(@item.Amount)</p>
+                                        }
+                                        @if (item.Type == false)
+                                        {
+                                            @item.Amount
+                                        }
+                                    </td>
+                                    <td>
+                                        <a class="editbudgetitem-button btn" data-id="@item.Id" id="icons"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a class="deletebudgetitem-button btn" data-id="@item.Id" id="icons"><i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Frequency)
-        </th>
-        <th></th>
-    </tr>
+                    </table>
+                    </div> 
+                <div id="budget-partial-div">
+                    @Html.Action("_Create","BudgetItems")
+                </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Household.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Frequency)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+             </div> 
+<h5>*All budget items are on a per month basis.</h5>
 
-</table>
+                    @section scripts{
+
+                        <script type="text/javascript">
+
+                            $('.deletebudgetitem-button').click(function () {
+                                $('#budget-partial-div').load('/BudgetItems/_Delete/' + $(this).data('id'));
+                            });
+
+                            $('.editbudgetitem-button').click(function () {
+                                $('#budget-partial-div').load('/BudgetItems/_Edit/' + $(this).data('id'));
+                            });
+
+                            //$('.createbudgetitem-button').click(function () {
+                            //    $('#budget-partial-div').load('/BudgetItems/_Create/');
+                            //});
+
+                            $('#budget').DataTable({
+                                "paging": true,
+                                "pageLength": 5,
+                                "search": false,
+                                "bLengthChange": false,
+                                "info": false,
+                                "bFilter": false,
+                                "ordering": false
+                            });
+
+                        </script>
+                    }

@@ -59,14 +59,14 @@
                         <li>
                             @Html.ActionLink("Accounts", "Index", "BankAccounts", null, new { @class= "btn-height" })
                         </li>
-                        <li>                                                 
-                            @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn-height" })                                                          
-                        </li>
                         <li>
-                            @Html.ActionLink("Budgets", "Index", "BudgetItems", null, new { @class = "btn-height" })
+                            @Html.ActionLink("Budget", "Index", "BudgetItems", null, new { @class = "btn-height" })
                         </li>
                         <li>
                             @Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "btn-height" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Household", "Index", "Households", null, new { @class = "btn-height" })
                         </li>
                     </ul>
                 </div>
@@ -85,6 +85,7 @@
     <!-- /#wrapper -->
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
 
     <!--Data Tables JS CDN-->

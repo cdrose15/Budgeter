@@ -83,13 +83,11 @@ namespace Budgeter.Controllers
 
         [HttpPost]
         // POST: Households/Leave
+        //[ValidateAntiForgeryToken]
         [AuthorizeHouseholdRequired]
 
         public async Task<ActionResult> Leave()
         {
-            //var user = User.Identity.GetHouseholdId();
-            // user = null;
-
             var user = db.Users.Find(User.Identity.GetUserId());
 
             user.HouseholdId = null;
@@ -162,6 +160,7 @@ namespace Budgeter.Controllers
 
         // POST: Households/Invite
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [AuthorizeHouseholdRequired]
 
         public ActionResult Invite(ContactMessage sendemail)
@@ -208,7 +207,6 @@ namespace Budgeter.Controllers
         {
             return View();
         }
-        
 
         protected override void Dispose(bool disposing)
         {

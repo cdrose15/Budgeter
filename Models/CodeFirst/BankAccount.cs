@@ -16,8 +16,12 @@ namespace Budgeter.Models.CodeFirst
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
+        [DataType(DataType.Currency)]
         public decimal Balance { get; set; }
+        public decimal ReconciledBalance { get; set; }
         public int HouseholdId { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual Household Household { get; set; }
         public virtual ICollection <Transaction> Transactions { get; set; }

@@ -11,10 +11,12 @@ namespace Budgeter.Models.CodeFirst
         public int Id { get; set; }
         [Required]
         public bool Type { get; set; }
+        [Required]
         public int? CategoryId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
         public int Frequency { get; set; }
         public int HouseholdId { get; set; }

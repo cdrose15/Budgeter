@@ -1,38 +1,47 @@
-﻿
-@{
-    ViewBag.Title = "Dashboard";
-}
+﻿@model Budgeter.Models.CodeFirst.Transaction
 
 <h3>Dashboard</h3>
 <hr />
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Budget vs Spending
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="col-lg-8">
-                                <div id="morris-bar-chart"></div>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.col-lg-4 (nested) -->
-                        <div class="col-lg-8">
-                            <div id="morris-bar-chart"></div>
-                        </div>
-                        <!-- /.col-lg-8 (nested) -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            </div>
+        <div class="col-md-5">
+            <div>@Html.Action("_TransactionList", "Transactions")</div>
+        </div> 
+        <div class="col-md-7">
+            <div>@Html.Action("_AccountList", "BankAccounts")</div>
+            <div id="donut-chart"></div>
         </div>
-    </div>
+        <div class="col-md-12">
+            <div id="bar-chart"></div>
+        </div>
+    </div> 
+</div> 
 
+@section scripts{
+    <script>
+Morris.Bar({
+  element: 'bar-chart',
+  data: [
+    { y: '2006', a: 100, b: 90 },
+    { y: '2007', a: 75,  b: 65 },
+    { y: '2008', a: 50,  b: 40 },
+    { y: '2009', a: 75,  b: 65 },
+    { y: '2010', a: 50,  b: 40 },
+    { y: '2011', a: 75,  b: 65 },
+    { y: '2012', a: 100, b: 90 }
+  ],
+  xkey: 'y',
+  ykeys: ['a', 'b'],
+  labels: ['Series A', 'Series B']
+});
+
+    Morris.Donut({
+  element: 'donut-chart',
+  data: [
+    {label: "Income", value: 100},
+    {label: "Expense", value: 75 },
+  ]
+});
+</script>
+}

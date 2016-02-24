@@ -17,6 +17,7 @@ namespace Budgeter.Models.CodeFirst
         [Required]
         public string Name { get; set; }
         public int? HouseholdId { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual Household Household { get; set; }
         public virtual ICollection<Transaction > Transactions { get; set; }

@@ -18,24 +18,26 @@ namespace Budgeter.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Transactions
-        public ActionResult Index()
+        // GET: _TransactionResult
+        public PartialViewResult _TransactionList()
         {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var transactions = db.Transactions.Where(t => t.BankAccountId  == t.BankAccount.Id && t.BankAccount.HouseholdId == user).Include(t => t.Category);
-            return View(transactions.ToList());
+            var transactions = db.Transactions.OrderByDescending(t => t.Date).Where(t => t.BankAccountId == t.BankAccount.Id &&
+                t.BankAccount.HouseholdId == user);
+            return PartialView(transactions.ToList().Take(4));
         }
 
         // GET: Transactions/Create
-        public ActionResult Create()
-        {
 
+        public PartialViewResult _Create()
+        {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var accountList = db.Accounts.Where(a => a.HouseholdId == user);
+            var accountList = db.Accounts.Where(a => a.HouseholdId == user && a.IsDeleted != true);
+            var categoryList = db.Categories.Where(c => c.HouseholdId == user && c.IsDeleted != true);
 
             ViewBag.BankAccountId = new SelectList(accountList.ToList(), "Id", "Name");
-            ViewBag.CategoryId = new SelectList(db.Categories.ToList(), "Id", "Name");
-            return View();
+            ViewBag.CategoryId = new SelectList(categoryList.ToList(), "Id", "Name");
+            return PartialView();
         }
 
         // POST: Transactions/Create
@@ -45,8 +47,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Date,BankAccountId,CategoryId,Description,Type,Reconciled,Amount")] Transaction transaction)
         {
-            var id = User.Identity.GetUserId();
-            var user = db.Users.FirstOrDefault(u => u.Id == id);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.BankAccountId);
 
             if (ModelState.IsValid)
@@ -54,55 +55,49 @@ namespace Budgeter.Controllers
                 if (transaction.Type == true)
                 {
                     account.Balance = (account.Balance - transaction.Amount);
+
+                    if(transaction.Reconciled == true)
+                    {
+                        account.ReconciledBalance = (account.ReconciledBalance - transaction.Amount);
+                    }
+
                     db.SaveChanges();
                 }
 
                 if (transaction.Type == false)
                 {
                     account.Balance = (account.Balance + transaction.Amount);
+
+                    if (transaction.Reconciled == true)
+                    {
+                        account.ReconciledBalance = (account.ReconciledBalance + transaction.Amount);
+                    }
+
                     db.SaveChanges();
                 }
 
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                
+                return RedirectToAction("Details","BankAccounts", new { id = transaction.BankAccountId });
             }
 
             ViewBag.BankAccountId = new SelectList(db.Accounts, "Id", "Name", transaction.BankAccountId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            return View(transaction);
-        }
-
-        // GET: Transactions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
             return View(transaction);
         }
 
         // GET: Transactions/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
+
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categoryList = db.Categories.Where(c => c.HouseholdId == user && c.IsDeleted != true);
+
             ViewBag.BankAccountId = new SelectList(db.Accounts, "Id", "Name", transaction.BankAccountId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            return View(transaction);
+            ViewBag.CategoryId = new SelectList(categoryList, "Id", "Name", transaction.CategoryId);
+            return PartialView(transaction);
         }
 
         // POST: Transactions/Edit/5
@@ -112,56 +107,81 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Date,BankAccountId,CategoryId,Description,Type,Reconciled,Amount")] Transaction transaction)
         {
+            var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.BankAccountId);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var userBankAccount = db.Accounts.Where(u => u.HouseholdId == user && u.IsDeleted != true);
+            var userCategoryList = db.Categories.Where(u => u.HouseholdId == user && u.IsDeleted != true);
 
             if (ModelState.IsValid)
             {
-                var originalBalance = db.Transactions.AsNoTracking().FirstOrDefault(o => o.Id == transaction.Id);
-                var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.BankAccountId);
+                var originalBal = db.Transactions.AsNoTracking().FirstOrDefault(o => o.Id == transaction.Id);
+                var originalReconBal = db.Transactions.AsNoTracking().FirstOrDefault(o => o.Id == transaction.Id);
 
+                account = db.Accounts.FirstOrDefault(a => a.Id == transaction.BankAccountId);
+     
                 // Reverse original balance calculation
-                if (transaction.Type == true)
+                if (originalBal.Type  == true)
                 {
-                    account.Balance = (account.Balance + originalBalance.Amount);
-                } 
-                if(transaction.Type == false)
+                    account.Balance = (account.Balance + originalBal.Amount);
+
+                    if (originalReconBal.Reconciled  == true)
+                    {
+                        account.ReconciledBalance = (account.ReconciledBalance + originalReconBal.Amount);
+                    }
+
+                    db.SaveChanges();
+                }
+                if (originalBal.Type == false)
                 {
-                    account.Balance = (account.Balance - originalBalance.Amount);
+                    account.Balance = (account.Balance - originalBal.Amount);
+
+                    if (originalReconBal.Reconciled == true)
+                    {
+                        account.ReconciledBalance = (account.ReconciledBalance - originalReconBal.Amount);
+                    }
+
+                    db.SaveChanges();
                 }
 
                 // New edit balance calculation
                 if (transaction.Type == true)
                 {
                     account.Balance = (account.Balance - transaction.Amount);
+
+                    if (transaction.Reconciled == true)
+                    {
+                        account.ReconciledBalance = account.ReconciledBalance - transaction.Amount;
+                    }
+
                     db.SaveChanges();
                 }
                 if (transaction.Type == false)
                 {
                     account.Balance = (account.Balance + transaction.Amount);
+
+                    if (transaction.Reconciled == true)
+                    {
+                        account.ReconciledBalance = account.ReconciledBalance + transaction.Amount;
+                    }
+
                     db.SaveChanges();
                 }
 
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BankAccounts", new { id = transaction.BankAccountId });
             }
-            ViewBag.BankAccountId = new SelectList(db.Accounts, "Id", "Name", transaction.BankAccountId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
+            ViewBag.BankAccountId = new SelectList(userBankAccount, "Id", "Name", transaction.BankAccountId);
+            ViewBag.CategoryId = new SelectList(userCategoryList, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
         // GET: Transactions/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
+     
+            return PartialView(transaction);
         }
 
         // POST: Transactions/Delete/5
@@ -169,7 +189,6 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-
             Transaction transaction = db.Transactions.Find(id);
             db.Transactions.Remove(transaction);
             db.SaveChanges();
@@ -181,15 +200,27 @@ namespace Budgeter.Controllers
             if(transaction.Type == true)
             {
                 account.Balance = (account.Balance + transaction.Amount);
+
+                if (transaction.Reconciled == true)
+                {
+                    account.ReconciledBalance = account.ReconciledBalance + transaction.Amount;
+                }
+
                 db.SaveChanges();
             }
             if(transaction.Type == false)
             {
                 account.Balance = (account.Balance - transaction.Amount);
+
+                if (transaction.Reconciled == true)
+                {
+                    account.ReconciledBalance = account.ReconciledBalance - transaction.Amount;
+                }
+
                 db.SaveChanges();
             }
-           
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Details", "BankAccounts", new { id = transaction.BankAccountId });
         }
 
         protected override void Dispose(bool disposing)

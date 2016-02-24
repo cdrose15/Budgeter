@@ -1,105 +1,90 @@
 ﻿@model Budgeter.Models.CodeFirst.BankAccount
-@{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h3>Transactions</h3>
+<h3>@Model.Name Transactions</h3>
+<h4 class="text-danger">@ViewBag.IsDeletedMessage</h4>
+<h5> Available Balance : $@Model.Balance</h5>
+<h5> Reconciled Balance : $@Model.ReconciledBalance </h5>
+
+<button class="createtran-button btn btn-sm btn-success">Add New</button>
+
 <hr />
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <p>
-                @Html.ActionLink("Add New", "Create", "Transactions", null, new { @class = "btn btn-sm btn-success" })
-            </p>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Manage</h4>
-                </div>
-                <section class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <tr>
-                                <th>
-                                    Account
-                                </th>
-                                <th>
-                                    Category
-                                </th>
-                                <th>
-                                    Date
-                                </th>
-                                <th>
-                                    Description
-                                </th>
-                                <th>
-                                    Expense
-                                </th>
-                                <th>
-                                    Income
-                                </th>
-                                <th>
-                                    Reconciled
-                                </th>
-                                <th>
-                                    Amount
-                                </th>
-                                <th></th>
-                            </tr>
-
-                            @foreach (var item in Model.Transactions )
+<div id="trans-div"></div>
+<div id="transaction-div">
+    <div class="table-responsive">
+        <table id="budget" class="display">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Account
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Expense
+                    </th>
+                    <th>
+                        Income
+                    </th>
+                    <th>
+                        Reconciled
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Transactions)
+                {
+                    <tr>
+                        <td>
+                            @item.Date.ToString("MM/dd/yyyy")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BankAccount.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @if (item.Type == true)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.BankAccount.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Category.Name)
-                                    </td>
-                                    <td>
-                                        @item.Date.ToString("MM/dd/yyyy")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
-                                    </td>
-                                    <td>
-                                        @if (item.Type == true)
-                                        {
-                                            <i class="fa fa-times fa-1"></i>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (item.Type == false)
-                                        {
-                                            <i class="fa fa-times fa-1"></i>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (item.Reconciled == true)
-                                        {
-                                            <i class="fa fa-check fa-1"></i>
-                                        }
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Edit", "Edit", "Transactions", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
-                                        @*@Html.ActionLink("Delete", "Delete", "Transactions", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })*@
-                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
-                                        <button></button>
-                                    </td>
-                                </tr>
+                                <p class="negative">(@item.Amount)</p>
                             }
-
-                        </table>
-                    </div>
-                </section>
-            </div>
-        </div>
+                        </td>
+                        <td>
+                            @if (item.Type == false)
+                            {
+                                @item.Amount
+                            }
+                        </td>
+                        <td>
+                            @if (item.Reconciled == true)
+                            {
+                                <i class="fa fa-check fa-1"></i>
+                            }
+                        </td>
+                        <td>
+                            <a class="edittran-button btn" data-id="@item.Id" id="icons"><i class="fa fa-pencil-square-o"></i></a>
+                            @*<a class="deletetran-button btn" data-id="@item.Id" id="icons"><i class="fa fa-trash-o"></i></a>*@
+                            <a class="deletetran-button btn" data-toggle="modal" data-target="#myModal" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-</div> 
+</div>
+
         <!-- Modal -->
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -110,11 +95,40 @@
                 <h4 class="panel-title">Delete Transaction</h4>
             </div>
             <div class="panel-body">
-                <form method="Post" action="@Url.Action("Delete","Transaction")">
-                    <h5>Are you sure you want to delete this transaction?</h5>
-                    <input type="submit" value="Leave this Household" class="btn btn-sm btn-danger" />
+                <form method="Post" action="@Url.Action("Delete","Transactions")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="delete-id" name="id" value="" />
+                    <h5>Are you sure you want to Delete this Transaction?</h5>
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $('.deletetran-button').click(function () {
+            $('#delete-id').val($(this).data('id'));
+        });
+
+        $('.edittran-button').click(function () {
+            $('#trans-div').load('/Transactions/_Edit/' + $(this).data('id'));
+        });
+
+        $('.createtran-button').click(function () {
+            $('#trans-div').load('/Transactions/_Create/');
+        });
+
+        $('#budget').DataTable({
+            "aaSorting":[[0,'desc']],
+            "paging": true,
+            "pageLength":5,
+            "bLengthChange": false,
+            "info": false
+        });
+
+    </script>
+}

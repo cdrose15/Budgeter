@@ -14,8 +14,7 @@ namespace Budgeter.Models.CodeFirst
             this.Categories = new HashSet<Category>();
             this.BudgetItems = new HashSet<BudgetItem>();
             this.Invites = new HashSet<Invite>();
-            this.Users = new HashSet<ApplicationUser >();
-        }
+            this.Users = new HashSet<ApplicationUser >();        }
 
         public int Id { get; set; }
         [Required]

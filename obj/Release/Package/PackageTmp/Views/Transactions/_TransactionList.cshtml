@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Budgeter.Models.CodeFirst.Transaction>
+
+                @*<div class="panel-heading">
+                    <h4 class="panel-title">Recent Transactions</h4>
+                </div>*@
+                <section class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Recent Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <p>@item.Date.ToString("MM/dd/yyyy") - @item.BankAccount.Name</p>
+                                            <p>@item.Description</p>
+                                            @if (item.Type == true)
+                                            {
+                                                <p class="negative">$(@item.Amount)</p>
+                                            }
+                                            @if (item.Type == false)
+                                            {
+                                                <p>$@item.Amount</p>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+

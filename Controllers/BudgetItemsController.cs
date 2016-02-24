@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Budgeter.Models;
 using Budgeter.Models.CodeFirst;
+using System.Web.Helpers;
 
 namespace Budgeter.Controllers
 {
@@ -20,7 +21,10 @@ namespace Budgeter.Controllers
         // GET: BudgetItems
         public ActionResult Index()
         {
-            var budgetItems = db.BudgetItems.Include(b => b.Category).Include(b => b.Household);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var budgetItems = db.BudgetItems.OrderBy(b => b.Type).Where(b => b.CategoryId == b.Category.Id
+                && b.HouseholdId == user);
+            ViewBag.SuccessMessage = TempData["successMessage"];
             return View(budgetItems.ToList());
         }
 
@@ -40,11 +44,13 @@ namespace Budgeter.Controllers
         }
 
         // GET: BudgetItems/Create
-        public ActionResult Create()
+        public PartialViewResult _Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var budgetCategoryList = db.Categories.Where(b => b.HouseholdId == user && b.IsDeleted != true);
+            ViewBag.CategoryId = new SelectList(budgetCategoryList, "Id", "Name");
+            ViewBag.HouseholdId = new SelectList(db.Households.Where(h => h.Id == user), "Id", "Name");
+            return PartialView();
         }
 
         // POST: BudgetItems/Create
@@ -52,35 +58,35 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Type,CategoryId,Name,Amount,Frequency,HouseholdId")] BudgetItem budgetItem)
+        public ActionResult Create([Bind(Include = "Id,Type,CategoryId,Name,Amount,HouseholdId")] BudgetItem budgetItem)
         {
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             if (ModelState.IsValid)
             {
+                budgetItem.HouseholdId = user;
                 db.BudgetItems.Add(budgetItem);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetItem.HouseholdId);
+            //ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetItem.HouseholdId);
             return View(budgetItem);
         }
 
         // GET: BudgetItems/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             BudgetItem budgetItem = db.BudgetItems.Find(id);
-            if (budgetItem == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetItem.HouseholdId);
-            return View(budgetItem);
+
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var budgetCategoryList = db.Categories.Where(b => b.HouseholdId == user);
+            var budgetHousehold = db.BudgetItems.Where(b => b.HouseholdId == user);
+
+            ViewBag.CategoryId = new SelectList(budgetCategoryList, "Id", "Name", budgetItem.CategoryId);
+            ViewBag.HouseholdId = new SelectList(budgetHousehold, "Id", "Name", budgetItem.HouseholdId);
+            return PartialView(budgetItem);
         }
 
         // POST: BudgetItems/Edit/5
@@ -88,10 +94,12 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Type,CategoryId,Name,Amount,Frequency,HouseholdId")] BudgetItem budgetItem)
+        public ActionResult Edit([Bind(Include = "Id,Type,CategoryId,Name,Amount,HouseholdId")] BudgetItem budgetItem)
         {
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             if (ModelState.IsValid)
             {
+                budgetItem.HouseholdId = user;
                 db.Entry(budgetItem).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -102,18 +110,11 @@ namespace Budgeter.Controllers
         }
 
         // GET: BudgetItems/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             BudgetItem budgetItem = db.BudgetItems.Find(id);
-            if (budgetItem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(budgetItem);
+
+            return PartialView(budgetItem);
         }
 
         // POST: BudgetItems/Delete/5
@@ -124,6 +125,7 @@ namespace Budgeter.Controllers
             BudgetItem budgetItem = db.BudgetItems.Find(id);
             db.BudgetItems.Remove(budgetItem);
             db.SaveChanges();
+            TempData["successMessage"] = "Budget Item successfully deleted";
             return RedirectToAction("Index");
         }
 
@@ -137,3 +139,4 @@ namespace Budgeter.Controllers
         }
     }
 }
+

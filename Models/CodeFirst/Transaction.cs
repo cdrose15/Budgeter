@@ -18,6 +18,7 @@ namespace Budgeter.Models.CodeFirst
         public bool Type { get; set; }
         public bool Reconciled { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
         public virtual BankAccount BankAccount { get; set; }
