@@ -5,8 +5,17 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
+            <div class="panel-heading">
+                <b>Budgeted Expenses vs. Actual Expenses (Current Month $)</b>
+            </div>
             <div id="bar-chart" style="height:250px;"></div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel-heading">
+                <b>Total Income vs. Total Expenses (Current Month)</b>
+            </div>
+            <div id="donut-chart" style="height:200px;"></div>
         </div>
     </div>
 </div>
@@ -17,7 +26,6 @@
         </div> 
         <div class="col-md-7">
             <div>@Html.Action("_AccountList", "BankAccounts")</div>
-            <div id="donut-chart" style="height:200px;"></div>
         </div>
     </div> 
 </div> 
@@ -28,6 +36,7 @@
         $.post('@Url.Action("DonutChartDashboard","Households")').then(function (response) {
             new Morris.Donut({
                 element: 'donut-chart',
+                formatter: function(y,data){return '$' + y},
                 data: response,
                 resize: true
             });
@@ -38,8 +47,10 @@
                 element: 'bar-chart',
                 data: response,
                 xkey: 'y',
-                ykeys: ['a', 'b'],
+                ykeys: ['a','b'],
                 labels: ['Budget', 'Actual'],
+                yLabels: $,
+                xLabelAngle: -45,
                 resize: true
             });
         });

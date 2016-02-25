@@ -12,6 +12,7 @@ using System.Web.Helpers;
 
 namespace Budgeter.Controllers
 {
+    [RoutePrefix("Budget")]
     [RequireHttps]
     [AuthorizeHouseholdRequired]
     public class BudgetItemsController : Controller

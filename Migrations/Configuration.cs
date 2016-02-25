@@ -34,13 +34,9 @@ namespace Budgeter.Migrations
                 context.CategoryLists.AddRange(
                     new List<CategoryList>() {
                 new CategoryList { Name = "Income" },
-                new CategoryList { Name = "Automobile" },
+                new CategoryList { Name = "Vehicle" },
                 new CategoryList { Name = "Food" },
-                new CategoryList { Name = "Clothing" },
                 new CategoryList { Name = "Home" },
-                new CategoryList { Name = "Utilities" },
-                new CategoryList { Name = "Pet" },
-                new CategoryList { Name = "Loans" },
                 new CategoryList { Name = "Misc." }
                     });
             }

@@ -15,11 +15,11 @@ using Newtonsoft.Json;
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-
     public class HouseholdsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Route("Household")]
         [HttpGet]
         //GET: Households/Index
         [AuthorizeHouseholdRequired]
@@ -62,7 +62,6 @@ namespace Budgeter.Controllers
                         user.HouseholdId = invite.HouseholdId;
                         db.Invites.Remove(invite);
                         // Refreshauthentication() call
-                        var userid = User.Identity.GetUserId();
                         await ControllerContext.HttpContext.RefreshAuthentication(user);
                         db.SaveChanges();
                         return RedirectToAction("Index", new { id = user });
@@ -93,7 +92,6 @@ namespace Budgeter.Controllers
 
             user.HouseholdId = null;
             // Refreshauthentication() call
-            var userid = User.Identity.GetUserId();
             await ControllerContext.HttpContext.RefreshAuthentication(user);
             db.SaveChanges();
 
@@ -128,7 +126,6 @@ namespace Budgeter.Controllers
                     var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
                     user.HouseholdId = hh.Id;
                     // Refreshauthentication() call
-                    var userid = User.Identity.GetUserId();
                     await ControllerContext.HttpContext.RefreshAuthentication(user);
                     db.SaveChanges();
 
@@ -212,15 +209,21 @@ namespace Budgeter.Controllers
         public ActionResult DonutChartDashboard()
         {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var spending = db.Transactions.Where(s => s.BankAccount.HouseholdId == user && s.Type == true 
-                && s.BankAccount.IsDeleted == false && s.Date.Year == DateTime.Now.Year &&
-                s.Date.Month == DateTime.Now.Month).Select(s => s.Amount).DefaultIfEmpty().Sum();
-            var income = db.Transactions.Where(i => i.BankAccount.HouseholdId == user && i.Type == false 
-                && i.BankAccount.IsDeleted == false && i.Date.Year == DateTime.Now.Year &&
-                i.Date.Month == DateTime.Now.Month).Select(i => i.Amount).DefaultIfEmpty().Sum();
+            var spending = db.Transactions.Where(s => s.BankAccount.HouseholdId == user 
+                && s.Type == true 
+                && s.BankAccount.IsDeleted == false 
+                && s.Date.Year == DateTime.Now.Year 
+                && s.Date.Month == DateTime.Now.Month)
+                .Select(s => s.Amount).DefaultIfEmpty().Sum();
+            var income = db.Transactions.Where(i => i.BankAccount.HouseholdId == user 
+                && i.Type == false 
+                && i.BankAccount.IsDeleted == false
+                && i.Date.Year == DateTime.Now.Year 
+                && i.Date.Month == DateTime.Now.Month)
+                .Select(i => i.Amount).DefaultIfEmpty().Sum();
 
-            var data = new[] { new { label = "Total Income $", value = (int)income },
-               new { label = "Total Expense $", value = (int)spending } };
+            var data = new[] { new { label = "Total Income", value = (int)income },
+               new { label = "Total Expense", value = (int)spending } };
 
             return Content(JsonConvert.SerializeObject(data), "application/json");
         }
@@ -228,14 +231,16 @@ namespace Budgeter.Controllers
         public ActionResult BarChartDashboard()
         {
             var user = db.Households.Find(Convert.ToInt32(User.Identity.GetHouseholdId()));
-
             var chartList = (from cat in user.Categories
+                             where cat.Name != "Income"
                              let sumBudget = (from bud in user.BudgetItems
                                               where cat.IsDeleted == false
+                                              && bud.CategoryId == cat.Id
                                               select bud.Amount
                                               ).DefaultIfEmpty().Sum()
                              let sumActual = (from tran in cat.Transactions
-                                              where tran.BankAccount.IsDeleted == false       
+                                              where tran.BankAccount.IsDeleted == false
+                                              && tran.Type == true       
                                               && tran.Date.Year == DateTime.Now.Year
                                               && tran.Date.Month == DateTime.Now.Month
                                               select tran.Amount

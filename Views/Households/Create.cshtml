@@ -6,15 +6,17 @@
 
 <h3>Household</h3>
 <h4>Please Create or Join a Household</h4>
+<hr />
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <div class="login-panel panel panel-default">
-                <section class="panel-body ">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Create</h4>
                     </div>
+                <section class="panel-body ">
+
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
@@ -26,7 +28,6 @@
                                 <div class="col-md-10">
                                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
                                 </div>
                             </div>
 
@@ -37,33 +38,40 @@
                             </div>
                         </div>
                     }
-                    </section> 
+                </section> 
                 </div> 
             </div> 
-
-        <div class="col-md-6">
-            <div class="login-panel panel panel-default">
-                <section class="panel-body ">
+        </div>
+    </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Join</h4>
-                    </div>               
-                    <form id="contact-form" action="@Url.Action("Join","HouseHolds")" method="post">
+                    </div> 
+                <section class="panel-body ">
+                    <form class="form-horizontal" id="contact-form" action="@Url.Action("Join","HouseHolds")" method="post">
 
                         @Html.AntiForgeryToken()
                         <div class="form-group">
-                            <label>Invite Code</label>
-                            <input type="text" name="Code" class="form-control"/>
-                            @Html.ValidationMessageFor(model => model.Invites, "", new { @class = "text-danger" })
+                            <label class="control-label col-md-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" name="Code" class="form-control" />
+                                @Html.ValidationMessageFor(model => model.Invites, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                        <div>
-                            <button class="btn btn-lg btn-success btn-block">Join</button>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button class="btn btn-lg btn-success btn-block">Join</button>
+                            </div>
                         </div>
                     </form>
                 </section>
             </div>
         </div> 
-      </div> 
-    </div> 
+     </div> 
+  </div> 
 
 
                     @section Scripts {

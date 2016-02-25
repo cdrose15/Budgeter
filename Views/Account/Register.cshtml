@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>@ViewBag.Title - Budgeter</title>
+    <title>Financial Portal</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <!--Data Tables CSS CDN-->
@@ -21,11 +21,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-4 col-md-offset-4">
             <div class="login-panel panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Create a new account</h4>
-                </div>
+                @*<div class="panel-heading">
+                    <h4 class="panel-title">Create Account</h4>
+                </div>*@
                 <section class="panel-body ">
                     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
@@ -33,37 +33,37 @@
 
                         @Html.ValidationSummary("", new { @class = "text-danger" })
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-7">
                                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-7">
                                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(m => m.LastName, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-7">
                                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-7">
                                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-10">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-7">
                                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
+                            <div class="col-md-offset-4 col-md-7">
                                 <input type="submit" class="btn btn-lg btn-success btn-block" value="Register" />
                             </div>
                         </div>

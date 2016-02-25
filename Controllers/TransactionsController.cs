@@ -94,8 +94,9 @@ namespace Budgeter.Controllers
 
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             var categoryList = db.Categories.Where(c => c.HouseholdId == user && c.IsDeleted != true);
+            var accountList = db.Accounts.Where(a => a.HouseholdId == user && a.IsDeleted != true);
 
-            ViewBag.BankAccountId = new SelectList(db.Accounts, "Id", "Name", transaction.BankAccountId);
+            ViewBag.BankAccountId = new SelectList(accountList, "Id", "Name", transaction.BankAccountId);
             ViewBag.CategoryId = new SelectList(categoryList, "Id", "Name", transaction.CategoryId);
             return PartialView(transaction);
         }

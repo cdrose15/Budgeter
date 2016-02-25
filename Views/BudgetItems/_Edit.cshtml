@@ -18,15 +18,6 @@
                             @Html.HiddenFor(model => model.HouseholdId)
 
                             <div class="form-group">
-                                @Html.LabelFor(model => model.Type, "Expense", htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.RadioButton("Type", true, htmlAttributes: new { @class = "radio" })
-                                </div>
-                                @Html.LabelFor(model => model.Type, "Income", htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.RadioButton("Type", false, htmlAttributes: new { @class = "radio" })
-                                </div>
-                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                                 @Html.LabelFor(model => model.CategoryId, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
@@ -45,6 +36,16 @@
                                     @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                 </div>
+
+                                @Html.LabelFor(model => model.Type, "Income", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.RadioButton("Type", false, htmlAttributes: new { @class = "radio" })
+                                </div>
+                                @Html.LabelFor(model => model.Type, "Expense", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.RadioButton("Type", true, htmlAttributes: new { @class = "radio" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                                     @*@Html.LabelFor(model => model.Frequency,"Annual", htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">

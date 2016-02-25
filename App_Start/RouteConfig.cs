@@ -13,6 +13,8 @@ namespace Budgeter
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes(); // maps the route when using [Route] on controller actions
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

@@ -1,20 +1,17 @@
-﻿.login-panel{
+﻿
+.login-panel{
     margin-top:125px;
 }
 
-.btn-height{
+/*.btn-height{
     height:45px;
     text-align :left  ;
     font-size :18px;
-}
+}*/
 
 .budgetimage{
     text-align :left ;
 
-}
-
-h1,h2,h3,h4,h5,h6{
-    font:bold !important ;
 }
 
 .landing-image{
@@ -49,8 +46,17 @@ h1,h2,h3,h4,h5,h6{
 
 .modal-dialog {
     width: 400px;
-    margin: 120px auto;
 }
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 150px !important;
+    }
+    #page-wrapper {
+        margin:0 0 0 150px !important;
+    }
+}
+
 /** {
   background: #000 !important;
   color: #0f0 !important;
