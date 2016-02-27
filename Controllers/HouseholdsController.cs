@@ -27,11 +27,19 @@ namespace Budgeter.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Find(user.HouseholdId);
+            if(user.HouseholdId == 52)
+            {
+                ViewBag.DemoMessage = "This is where you can view all members of your household, which is " +
+                    "everyone that you are sharing your financial information with. You can also invite " +
+                    "others to join your household by email and leave your current household to create a new one. "+
+                    "I hope your Demo experience is going well. Thanks again for visiting!";
+            }
             if (household == null)
             {
                 return RedirectToAction("Create", "Households");
             }
 
+            ViewBag.LeaveMessage = TempData["leaveMessage"];
             ViewBag.SuccessMessage = TempData["successMessage"];
             return View(household);
         }
@@ -90,12 +98,21 @@ namespace Budgeter.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            user.HouseholdId = null;
-            // Refreshauthentication() call
-            await ControllerContext.HttpContext.RefreshAuthentication(user);
-            db.SaveChanges();
+            if (user.HouseholdId == 52)
+            {
+                TempData["leaveMessage"] = "Hey now... Leaving the household would ruin the Demo. How about we just " +
+                    "ignore that request for now.";
+                return RedirectToAction("Index","Households");
+            }
+            else
+            {
+                user.HouseholdId = null;
+                // Refreshauthentication() call
+                await ControllerContext.HttpContext.RefreshAuthentication(user);
+                db.SaveChanges();
 
-            return RedirectToAction("Create", "Households");
+                return RedirectToAction("Create", "Households");
+            }
         }
 
         [HttpGet]
@@ -203,7 +220,18 @@ namespace Budgeter.Controllers
 
         public ActionResult Dashboard()
         {
-            return View();
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            if (user == 52)
+            {
+                ViewBag.DemoMessage = "Thanks for taking the time to Demo this application! This is the Dashboard, " +
+                    "which is the main hub of your finances. You can compare your spending against your budgeted expenses, " +
+                    "see all of your accounts information, and view your most recent transactions";
+                return View();
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult DonutChartDashboard()
@@ -233,6 +261,7 @@ namespace Budgeter.Controllers
             var user = db.Households.Find(Convert.ToInt32(User.Identity.GetHouseholdId()));
             var chartList = (from cat in user.Categories
                              where cat.Name != "Income"
+                             && cat.IsDeleted  == false
                              let sumBudget = (from bud in user.BudgetItems
                                               where cat.IsDeleted == false
                                               && bud.CategoryId == cat.Id

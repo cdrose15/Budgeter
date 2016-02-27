@@ -21,6 +21,12 @@ namespace Budgeter.Controllers
         public ActionResult Index()
         {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            if(user == 52)
+            {
+                ViewBag.DemoMessage = "In Categories we have automatically generated a small list for you " +
+                    "from the start. If you don't like them go ahead and create your own. These are the " +
+                    "categories you will use to specify your budget and choose for each transaction.";
+            }
             var categories = db.Categories.Where(c => c.HouseholdId == user && c.IsDeleted != true).OrderBy(c => c.Name);
 
             ViewBag.SuccessMessage = TempData["successMessage"];

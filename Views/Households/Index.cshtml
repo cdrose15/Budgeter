@@ -4,7 +4,8 @@
     ViewBag.Title = "Details";
 }
 
-<h3>Members of Household</h3>
+<h3>Household Management</h3>
+<p class="text-primary">@ViewBag.DemoMessage</p>
 <hr />
     <div class="container">
     <div class="row">
@@ -74,6 +75,7 @@
                     <h5>Leave your current household and start a new one</h5>
                     <!-- Are you sure you want to leave household modal -->
                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Leave Household</button>
+                    <p class="text-danger">@ViewBag.LeaveMessage</p>
                 </section>
             </div>
         </div>

@@ -1,6 +1,7 @@
 ﻿@model Budgeter.Models.CodeFirst.BankAccount
 
 <h3>@Model.Name Transactions</h3>
+<p class="text-primary">@ViewBag.DemoMessage</p>
 <h4 class="text-danger">@ViewBag.IsDeletedMessage</h4>
 <h5> Available Balance : $@Model.Balance</h5>
 <h5> Reconciled Balance : $@Model.ReconciledBalance </h5>
@@ -36,7 +37,9 @@
                     <th>
                         Reconciled
                     </th>
-                    <th></th>
+                    <th>
+                        Edit / Delete
+                    </th>
                 </tr>
             </thead>
             <tbody>

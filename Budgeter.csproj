@@ -318,8 +318,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -329,15 +327,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\BankAccounts\_Create.cshtml" />
-    <Content Include="Views\BankAccounts\_Delete.cshtml" />
     <Content Include="Views\BankAccounts\_Edit.cshtml" />
     <Content Include="Views\BudgetItems\_Create.cshtml" />
-    <Content Include="Views\BudgetItems\_Delete.cshtml" />
-    <Content Include="Views\BudgetItems\Details.cshtml" />
     <Content Include="Views\BudgetItems\_Edit.cshtml" />
     <Content Include="Views\BudgetItems\Index.cshtml" />
     <Content Include="Views\Categories\_Create.cshtml" />
-    <Content Include="Views\Categories\_Delete.cshtml" />
     <Content Include="Views\Categories\_Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
@@ -352,6 +346,7 @@
     <Content Include="Views\BankAccounts\Details.cshtml" />
     <Content Include="Views\BankAccounts\_AccountList.cshtml" />
     <Content Include="Views\Transactions\_TransactionList.cshtml" />
+    <Content Include="Views\BankAccounts\_Transfer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

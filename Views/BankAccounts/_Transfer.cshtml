@@ -1,0 +1,43 @@
+﻿
+@model Budgeter.Models.CodeFirst.BankAccount
+
+@using (Html.BeginForm("Transfer", "BankAccounts", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Balance Transfer</h4>
+            </div>
+            <section class="panel-body ">
+                <div class="form-group">
+
+                    @Html.LabelFor(model => model.Name, "From", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("fromId", null, htmlAttributes: new { @class = "form-control", @name = "fromId"})
+                    </div>
+
+                    @Html.LabelFor(model => model.Name, "To", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("toId",null, htmlAttributes: new { @class = "form-control" , @name = "toId" })
+                    </div>
+
+                    <label class="control-label col-md-2">Amount</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="transferamount" />
+                        @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Transfer" class="btn btn-sm btn-success " />
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+}

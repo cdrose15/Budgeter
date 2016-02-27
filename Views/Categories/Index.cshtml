@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Budgeter.Models.CodeFirst.Category>
 
 <h3>Categories</h3>
+<p class="text-primary">@ViewBag.DemoMessage</p>
 <hr />
 
 <div class="container">
@@ -13,7 +14,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Name)
                                     </th>
-                                    <th></th>
+                                    <th>
+                                        Edit / Delete
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,7 +82,7 @@
             $('#budget').DataTable({
                 "paging": true,
                 "pageLength": 5,
-                "search":false,
+                "search":true,
                 "bLengthChange": false,
                 "info": false,
                 "bFilter": false,

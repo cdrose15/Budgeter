@@ -23,6 +23,12 @@ namespace Budgeter.Controllers
         public ActionResult Index()
         {
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            if (user == 52)
+            {
+                ViewBag.DemoMessage = "So you have made it to the budgets page! Go ahead and create a budget " +
+                    "item for yourself. This is what your personal bar chart will be based off of on the " +
+                    "Dashboard. This is essential to make sure you are properly setting your spending goals.";
+            }
             var budgetItems = db.BudgetItems.OrderBy(b => b.Type).Where(b => b.CategoryId == b.Category.Id
                 && b.HouseholdId == user);
             ViewBag.SuccessMessage = TempData["successMessage"];

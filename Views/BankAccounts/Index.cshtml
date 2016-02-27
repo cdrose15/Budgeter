@@ -1,108 +1,127 @@
 ﻿@model IEnumerable<Budgeter.Models.CodeFirst.BankAccount>
 
 <h3>Accounts</h3>
+<p class="text-primary">@ViewBag.DemoMessage</p>
 <hr />
 
 <div class="container">
     <div class="row">
         <div class="col-md-7">
-                <section class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
+            <section class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Account
+                                </th>
+                                <th>
+                                    Balance
+                                </th>
+                                <th>
+                                    Edit / Delete
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <th>
-                                        Account
-                                    </th>
-                                    <th>
-                                        Balance
-                                    </th>
-                                    <th></th>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+
+                                    </td>
+                                    <td>
+                                        @if (item.Balance < 0)
+                                        {
+                                            <p class="negative">$@item.Balance</p>
+                                        }
+                                        @if (item.Balance >= 0)
+                                        {
+                                            <p>$@item.Balance</p>
+                                        }
+
+                                        @if (item.Balance < 50 && item.Balance > 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.OverdraftWarning</p>
+                                        }
+                                        @if (item.Balance < 0)
+                                        {
+                                            <p class="text-danger">@ViewBag.Overdraft</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a class="edit-button btn" data-id="@item.Id"><i class="fa fa-pencil-square-o"></i></a>
+                                        @*<a class="delete-button btn" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>*@
+                                        <a class="delete-button btn" data-toggle="modal" data-target="#myModal" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>
+                                        @Html.ActionLink("Transactions", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                       
-                                        </td>
-                                        <td>
-                                            @if (item.Balance < 0)
-                                            {
-                                                <p class="negative">$@item.Balance</p>
-                                            }
-                                            @if (item.Balance >= 0)
-                                            {
-                                                <p>$@item.Balance</p>
-                                            }
-
-                                            @if (item.Balance < 50 && item.Balance > 0)
-                                            {
-                                                <p class="text-danger">@ViewBag.OverdraftWarning</p>
-                                            }
-                                            @if (item.Balance < 0)
-                                            {
-                                                <p class="text-danger">@ViewBag.Overdraft</p>
-                                            }
-                                        </td>
-                                        <td>
-                                            <a class="edit-button btn" data-id="@item.Id"><i class="fa fa-pencil-square-o"></i></a>
-                                            @*<a class="delete-button btn" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>*@
-                                            <a class="delete-button btn" data-toggle="modal" data-target="#myModal" data-id="@item.Id"><i class="fa fa-trash-o"></i></a>
-                                            @Html.ActionLink("Transactions", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div class="text-danger">
-                            @ViewBag.errorMessage
+                            }
+                        </tbody>
+                    </table>
+                    <div class="text-danger">
+                        @ViewBag.errorMessage
+                    </div>
+                    <div class="text-success">
+                        @ViewBag.successMessage
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-5">
+            <div id="edit-div" class="transfer-div">
+                @Html.Action("_Create", "BankAccounts")
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7"></div>
+        <div class="col-md-5">
+            @Html.Action("_Transfer", "BankAccounts")
+        </div>
+    </div>
+</div>
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="panel-title">Delete Account</h4>
                         </div>
-                       </div>
-                    </section> 
-          </div> 
-        <div id="edit-div" class="delete-div">
-            @Html.Action("_Create", "BankAccounts")
-        </div>
-    </div>
-</div>
-
-        <!-- Modal -->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="panel panel-warning">
-            <div class="panel-heading">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="panel-title">Delete Account</h4>
+                        <div class="panel-body">
+                            <form method="Post" action="@Url.Action("Delete","BankAccounts")">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" id="delete-id" name="id" value="" />
+                                <h5>Are you sure you want to Delete this Account?</h5>
+                                <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <form method="Post" action="@Url.Action("Delete","BankAccounts")">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="delete-id" name="id" value="" />
-                    <h5>Are you sure you want to Delete this Account?</h5>
-                    <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-@section scripts{
+            @section scripts{
 
-    <script type="text/javascript">
+                <script type="text/javascript">
 
-            $('.edit-button').click(function () {
-                $('#edit-div').load('/BankAccounts/_Edit/' + $(this).data('id'));
-            });
+                    $('.edit-button').click(function () {
+                        $('#edit-div').load('/BankAccounts/_Edit/' + $(this).data('id'));
+                    });
 
-            $('.delete-button').click(function () {
-                $('#delete-id').val($(this).data('id'));
-            });
-      
-    </script>
-    }
+                    $('.delete-button').click(function () {
+                        $('#delete-id').val($(this).data('id'));
+                    });
+
+                    $('.transfer-button').click(function () {
+                        $('.transfer-div').load('/BankAccounts/_Transfer/');
+                    });
+
+                </script>
+            }
 
 

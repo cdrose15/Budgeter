@@ -57,6 +57,10 @@
     }
 }
 
+.panel-heading{
+    text-align :center;
+}
+
 /** {
   background: #000 !important;
   color: #0f0 !important;

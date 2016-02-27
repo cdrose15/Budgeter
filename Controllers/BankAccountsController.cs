@@ -22,19 +22,19 @@ namespace Budgeter.Controllers
         [AuthorizeHouseholdRequired]
         public ActionResult Index(BankAccount bankAccount)
         {
-            var HHidS = User.Identity.GetHouseholdId();
-            int HHid;
-            if (!string.IsNullOrWhiteSpace(HHidS))
-            {
-                HHid = Convert.ToInt32(HHidS);
-            }
-            else
-                HHid = 0;
-            var accounts = db.Accounts.Where(b => b.HouseholdId == HHid && b.IsDeleted != true);
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var accounts = db.Accounts.Where(b => b.HouseholdId == user && b.IsDeleted != true);
 
+            if (user == 52)
+            {
+                ViewBag.DemoMessage = "Glad to see your still using this Demo! On this page you can " +
+                    "create, edit, and delete accounts. Each account has a link to access the transactions " +
+                    "associated with it as well. You also can transfer amounts from and to specified accounts.";
+            }
             ViewBag.OverdraftWarning = "Overdraft Warning";
             ViewBag.Overdraft = "Overdraft Notice";
             ViewBag.ErrorMessage = TempData["errorMessage"];
+            ViewBag.SuccessMessage = TempData["successMessage"];
             return View(accounts.ToList());            
         }
 
@@ -75,7 +75,60 @@ namespace Budgeter.Controllers
             return View(bankAccount);
         }
 
-        // GET: Categories/Details/5
+        // GET: BankAccounts/Transfer
+        public PartialViewResult _Transfer(BankAccount bankAccount)
+        {
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var fromList = db.Accounts.Where(f => f.HouseholdId == user && f.IsDeleted != true);
+            var toList = db.Accounts.Where(t => t.HouseholdId == user && t.IsDeleted != true);
+
+            ViewBag.fromId = new SelectList(fromList.ToList(), "Id", "Name",bankAccount.Id);
+            ViewBag.toId = new SelectList(toList.ToList(), "Id", "Name", bankAccount.Id);
+
+            return PartialView();
+        }
+
+        //POST: BankAccounts/Transfer
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeHouseholdRequired]
+        public ActionResult Transfer(int fromId, int toId, decimal transferamount)
+        {
+            var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+
+            var fromAccount = db.Accounts.Find(fromId);
+            var toAccount = db.Accounts.Find(toId);
+
+            Transaction fromTransaction = new Transaction();
+            fromTransaction.Amount = transferamount;
+            fromTransaction.Description = "Transfer";
+            fromTransaction.Date = DateTime.Now;
+            fromTransaction.Type = true;
+            fromTransaction.BankAccountId = fromAccount.Id;
+            fromTransaction.Reconciled = true;
+            db.Transactions.Add(fromTransaction);
+            fromAccount.Balance = fromAccount.Balance - transferamount;
+            fromAccount.ReconciledBalance = fromAccount.Balance - transferamount;
+            db.SaveChanges();
+
+            Transaction toTransaction = new Transaction();
+            toTransaction.Amount = transferamount;
+            toTransaction.Description = "Transfer";
+            toTransaction.Date = DateTime.Now;
+            toTransaction.Type = false;
+            toTransaction.BankAccountId = toAccount.Id;
+            toTransaction.Reconciled = true;
+            db.Transactions.Add(toTransaction);
+            toAccount.Balance = toAccount.Balance + transferamount;
+            toAccount.ReconciledBalance = toAccount.Balance + transferamount;
+            db.SaveChanges();
+
+            TempData["successMessage"] = "Transfer completed";
+            return RedirectToAction("Index");
+        }
+
+
+        // GET: BankAcounts/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -86,6 +139,11 @@ namespace Budgeter.Controllers
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.OrderBy(t => t.Date).Where(t => t.BankAccountId  == t.BankAccount.Id &&
                 t.BankAccount.HouseholdId == user).Include(t => t.Category);
+            if(user == 52)
+            {
+                ViewBag.DemoMessage = "Go ahead and create, edit, and delete a transaction from this page. Do everyone " +
+                    "a favor and make sure you keep some around for the other Demo users to see though.";
+            }
             if (bankAccount  == null)
             {
                 return HttpNotFound();
@@ -93,7 +151,6 @@ namespace Budgeter.Controllers
 
             if(bankAccount.IsDeleted == true)
             {
-                ViewBag.IsDeletedMessage = "This account has been deleted. You can only view transactions.";
                 return View(bankAccount);
             }
             return View(bankAccount);
@@ -147,7 +204,7 @@ namespace Budgeter.Controllers
             }
             else
             {
-                TempData["errorMessage"] = "Account balance must be $0 in order to delete, please manually move your remaining balance to another account";
+                TempData["errorMessage"] = "Account balance must be $0 in order to delete, please transfer your remaining balance to another account";
                 return RedirectToAction("Index");
             }
          
