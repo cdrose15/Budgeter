@@ -7,7 +7,7 @@
                                 <p><img src="~/img/Money Jar.png" /></p>
                             </div>
                             <div class="col-md-8">
-                                <h3 id="welcome">Welcome to Budget! Your Personal Financial Portal</h3>
+                                <h3 id="welcome"><b>Welcome to Budget! Your Personal Financial Portal</b></h3>
                                 <h4>
                                     Are you looking for a better
                                     way to keep track of your personal finances? Then you
@@ -19,27 +19,52 @@
                                     different categories of spending. To get started please
                                     Register a new account or Log In.
                                 </h4>
-                                <h5><b>If you would like to test this application before you sign up,
-                                     use the following Log In information:</b> <br /><br />
-                                    <b>Email: BudgetDemo@demo.com</b> <br /><br />
-                                    <b>Password: Password-1</b></h5>
-                            </div>
+                                <br />
+                                <h5><b>Would you like to test this application before you register?</b></h5>
+                                <form method="Post" action="@Url.Action("DemoLogin","Account")">
+                                    <input type="submit" value="Demo Application" class="btn btn-sm btn-default" />
+                                </form>  
+                                <br />
+                                <br />
+                                <div class="col-md-12">
+                                    <h5><b>Technologies used:</b></h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="~/img/mvcLogo.png" />                
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li>Entity Framework</li>
+                                        <li>Code First Database</li>
+                                        <li>SQL</li>
+                                        <li>LINQ</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li>Razor</li>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>Bootstrap</li>
+                                    </ul>
+                                </div>
                         </div>
                     </div>
                 </div>
-            <hr />
+                </div>
+<hr />
+<footer class="my-footer">
+    <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Budget</p>
+    <ul class="list-inline social-buttons">
+        <li>
+            <a href="https://www.facebook.com/Chris-Rose-Web-Developer-518959451610719" target="_blank"><i class="fa fa-facebook"></i></a>
+        </li>
+        <li>
+            <a href="https://www.linkedin.com/in/christopher-rose-403801100" target="_blank"><i class="fa fa-linkedin"></i></a>
+        </li>
+        <li>
+            <a href="https://github.com/cdrose15/Budgeter" target="_blank"><i class="fa fa-github"></i></a>
+        </li>
+    </ul>
+</footer>
 
-            <footer class="my-footer">
-                <p>Copyright &copy; Chris Rose @DateTime.Now.Year - Budget</p>
-                <ul class="list-inline social-buttons">
-                    <li>
-                        <a href="https://www.facebook.com/Chris-Rose-Web-Developer-518959451610719" target="_blank"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li>
-                        <a href="https://www.linkedin.com/in/christopher-rose-403801100" target="_blank"><i class="fa fa-linkedin"></i></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/cdrose15/Budgeter" target="_blank"><i class="fa fa-github"></i></a>
-                    </li>
-                </ul>
-            </footer>

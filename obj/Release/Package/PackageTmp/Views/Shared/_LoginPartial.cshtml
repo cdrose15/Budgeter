@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Budgeter.Models
+@{ 
+    var user = Convert.ToInt32(User.Identity.GetHouseholdId());
+}
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -8,7 +11,14 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
+            @if (user != 52)
+            {
             @Html.ActionLink("Welcome " + User.Identity.GetName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else
+            {
+                @Html.ActionLink("Welcome " + User.Identity.GetName(), "Dashboard","Households")
+            }
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>

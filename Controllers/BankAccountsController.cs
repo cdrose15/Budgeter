@@ -25,17 +25,19 @@ namespace Budgeter.Controllers
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(b => b.HouseholdId == user && b.IsDeleted != true);
 
-            if (user == 52)
-            {
-                ViewBag.DemoMessage = "Glad to see your still using this Demo! On this page you can " +
-                    "create, edit, and delete accounts. Each account has a link to access the transactions " +
-                    "associated with it as well. You also can transfer amounts from and to specified accounts.";
-            }
-            ViewBag.OverdraftWarning = "Overdraft Warning";
-            ViewBag.Overdraft = "Overdraft Notice";
-            ViewBag.ErrorMessage = TempData["errorMessage"];
-            ViewBag.SuccessMessage = TempData["successMessage"];
-            return View(accounts.ToList());            
+                if (user == 52)
+                {
+                    ViewBag.DemoMessage = "Glad to see your still using this Demo! On this page you can " +
+                        "create, edit, and delete accounts. Each account has a link to access the transactions " +
+                        "associated with it as well. You also can transfer amounts from and to specified accounts.";
+                }
+                ViewBag.OverdraftWarning = "Overdraft Warning";
+                ViewBag.Overdraft = "Overdraft Notice";
+                ViewBag.ErrorMessage = TempData["errorMessage"];
+                ViewBag.SuccessMessage = TempData["successMessage"];
+                return View(accounts.ToList());
+            
+                          
         }
 
         // GET: BankAccounts/Create
@@ -94,6 +96,7 @@ namespace Budgeter.Controllers
         [AuthorizeHouseholdRequired]
         public ActionResult Transfer(int fromId, int toId, decimal transferamount)
         {
+
             var user = Convert.ToInt32(User.Identity.GetHouseholdId());
 
             var fromAccount = db.Accounts.Find(fromId);
@@ -126,7 +129,6 @@ namespace Budgeter.Controllers
             TempData["successMessage"] = "Transfer completed";
             return RedirectToAction("Index");
         }
-
 
         // GET: BankAcounts/Details/5
         public ActionResult Details(int? id)

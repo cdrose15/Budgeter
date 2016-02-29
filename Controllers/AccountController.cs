@@ -104,6 +104,18 @@ namespace Budgeter.Controllers
             }
         }
 
+        // POST: /Account/DemoLogin
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> DemoLogin()
+        {
+            var email = "BudgetDemo@demo.com";
+            var password = "Password-1";
+            var result = await SignInManager.PasswordSignInAsync(email, password, false, shouldLockout: false);
+            return RedirectToAction("Dashboard", "Households");
+        }
+
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

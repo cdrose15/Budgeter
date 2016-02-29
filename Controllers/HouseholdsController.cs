@@ -116,6 +116,7 @@ namespace Budgeter.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         // GET: Households/Create
         public ActionResult Create()
         {
